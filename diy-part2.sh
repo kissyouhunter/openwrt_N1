@@ -16,6 +16,3 @@ sed -i 's/192.168.1.1/192.168.1.3/g' package/base-files/files/bin/config_generat
 #themes
 git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly package/luci-theme-Butterfly
 git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly-dark package/luci-theme-Butterfly-dark
-
-./scripts/feeds update -a
-./scripts/feeds install -a
