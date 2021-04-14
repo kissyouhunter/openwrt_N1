@@ -12,3 +12,4 @@ src-git helloworld https://github.com/fw876/helloworld
 src-git kenzok https://github.com/kenzok8/openwrt-packages
 src-git small https://github.com/kenzok8/small
 src-git package https://github.com/gd0772/package
+src-git diskman https://github.com/lisaac/luci-app-diskman
