@@ -19,8 +19,8 @@ sed -i 's/OpenWrt/N1/g' package/base-files/files/bin/config_generate
 sed -i "s/R21.4.18/R21.4.18 2021.04.23 powered by kissyouhunter/g" package/lean/default-settings/files/zzz-default-settings
 #修改luci-app-adguardhome配置config文件
 sed -i 's/usr/bin/AdGuardHome/usr/bin/AdGuardHome/AdGuardHome/g' /feed/kenzok/luci-app-adguardhome/root/etc/config
+#删除默认密码
+sed -i "/CYXluq4wUazHjmCDBCqXF/d" package/lean/default-settings/files/zzz-default-settings
 #themes
 git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly package/luci-theme-Butterfly
 git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly-dark package/luci-theme-Butterfly-dark
-#删除默认密码
-sed -i "/CYXluq4wUazHjmCDBCqXF/d" package/lean/default-settings/files/zzz-default-settings
