@@ -18,7 +18,7 @@ sed -i 's/OpenWrt/N1/g' package/base-files/files/bin/config_generate
 # 添加旁路由防火墙
 echo "iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE" >> package/network/config/firewall/files/firewall.user
 #修改build日期
-sed -i "s/R21.4.18/R21.4.18 2021.04.27 powered by kissyouhunter/g" package/lean/default-settings/files/zzz-default-settings
+sed -i "s/R21.4.18/R21.4.18 2021.04.28 powered by kissyouhunter/g" package/lean/default-settings/files/zzz-default-settings
 #修改luci-app-adguardhome配置config文件
 sed -i 's/usr/bin/AdGuardHome/usr/bin/AdGuardHome/AdGuardHome/g' feeds/kenzok/luci-app-adguardhome/root/etc/config/AdGuardHome
 #删除默认密码
