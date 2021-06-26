@@ -18,8 +18,13 @@ sed -i 's/OpenWrt/N1/g' package/base-files/files/bin/config_generate
 # 添加旁路由防火墙
 echo "#iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE" >> package/network/config/firewall/files/firewall.user
 #修改build日期
-sed -i "s/R21.6.22/R21.6.22 2021.06.27 powered by kissyouhunter/g" package/lean/default-settings/files/zzz-default-settings
+#sed -i "s/R21.6.22/R21.6.22 2021.06.27 powered by kissyouhunter/g" package/lean/default-settings/files/zzz-default-settings
 #sed -i "s/Openwrt/N1/g" package/lean/default-settings/files/zzz-default-settings
+version=$(grep "DISTRIB_REVISION=" package/lean/default-settings/files/zzz-default-settings  | awk -F "'" '{print $2}')
+sed -i '/DISTRIB_REVISION/d' package/lean/default-settings/files/zzz-default-settings
+echo "echo \"DISTRIB_REVISION='${version} $(TZ=UTC-8 date "+%Y.%m.%d") powered by kissyouhunter '\" >> /etc/openwrt_release" >> package/lean/default-settings/files/zzz-default-settings
+sed -i '/exit 0/d' package/lean/default-settings/files/zzz-default-settings
+echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 #修改luci-app-adguardhome配置config文件
 #sed -i 's'/usr/bin/AdGuardHome'/'usr/bin/AdGuardHome/AdGuardHome'/g' feeds/kenzok/luci-app-adguardhome/root/etc/config/AdGuardHome
 #删除默认密码
