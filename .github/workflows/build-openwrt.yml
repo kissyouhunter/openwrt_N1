@@ -81,11 +81,6 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
-        fi
-        source "${PATH1}/common.sh" && Diy_all2
-        if [ -n "$(ls -A "${PATH1}/diy" 2>/dev/null)" ]; then
-          cp -Rf "${PATH1}"/diy/* "${Home}"
-        fi
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
@@ -97,6 +92,11 @@ jobs:
     - name: chmod
       run: |
         cd openwrt
+        fi
+        source "${PATH1}/common.sh" && Diy_all2
+        if [ -n "$(ls -A "${PATH1}/diy" 2>/dev/null)" ]; then
+          cp -Rf "${PATH1}"/diy/* "${Home}"
+        fi
         chmod -R 755 .
         
     - name: Download package
