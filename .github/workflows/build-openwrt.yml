@@ -92,7 +92,6 @@ jobs:
     - name: chmod
       run: |
         cd openwrt
-        fi
         source "${PATH1}/common.sh" && Diy_all2
         if [ -n "$(ls -A "${PATH1}/diy" 2>/dev/null)" ]; then
           cp -Rf "${PATH1}"/diy/* "${Home}"
