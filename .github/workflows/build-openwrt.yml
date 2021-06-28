@@ -60,7 +60,6 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        echo "PATH1=${GITHUB_WORKSPACE}/openwrt/build/${{matrix.target}}" >> $GITHUB_ENV
 
     - name: Load custom feeds
       run: |
@@ -93,10 +92,6 @@ jobs:
     - name: chmod
       run: |
         cd openwrt
-        source "${PATH1}/common.sh" && Diy_all2
-        if [ -n "$(ls -A "${PATH1}/diy" 2>/dev/null)" ]; then
-          cp -Rf "${PATH1}"/diy/* "${Home}"
-        fi
         chmod -R 755 .
         
     - name: Download package
