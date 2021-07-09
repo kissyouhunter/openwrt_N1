@@ -15,3 +15,8 @@
 
 # Add a feed source
 #sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
+
+# echo '删除重复插件'
+rm -rf ./package/lean/luci-app-netdata
+rm -rf ./package/lean/luci-app-jd-dailybonus
+rm -rf ./package/lean/luci-lib-docker
