@@ -38,6 +38,12 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
+    - name: telegrame_bot
+      run: |
+        if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
+          您正在使用kissyouhunter仓库的#${{env.Run_number}}号),请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+        fi
     - name: Checkout
       uses: actions/checkout@main
 
@@ -193,3 +199,12 @@ jobs:
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: telegram_bot
+      run: |
+        if [[ "${BOT}" == "TRUE" ]]; then
+          if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
+            您使用kissyouhunter仓库的#${{env.Run_number}}号)顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          fi
+        fi
