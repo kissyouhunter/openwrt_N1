@@ -21,3 +21,9 @@
 rm -rf ./package/lean/luci-app-netdata
 rm -rf ./package/lean/luci-app-jd-dailybonus
 rm -rf ./package/lean/luci-lib-docker
+
+# 替换index.htm文件 X86
+wget -O ./package/lean/autocore/files/x86/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/index_x86.htm
+
+# 替换banner
+wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/banner
