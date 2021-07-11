@@ -26,7 +26,7 @@ echo "echo \"DISTRIB_REVISION='${version} $(TZ=UTC-8 date "+%Y.%m.%d") powered b
 sed -i '/exit 0/d' package/lean/default-settings/files/zzz-default-settings
 echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 #修改luci-app-adguardhome配置config文件
-#sed -i 's'/usr/bin/AdGuardHome'/'usr/bin/AdGuardHome/AdGuardHome'/g' feeds/kenzok/luci-app-adguardhome/root/etc/config/AdGuardHome
+#sed -i 's'/usr/bin/AdGuardHome'/'usr/bin/AdGuardHome/AdGuardHome'/g' #feeds/kenzok/luci-app-adguardhome/root/etc/config/AdGuardHome
 #删除默认密码
 #sed -i "/CYXluq4wUazHjmCDBCqXF/d" package/lean/default-settings/files/zzz-default-settings
 #themes
