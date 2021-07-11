@@ -24,7 +24,13 @@ rm -rf ./package/lean/luci-app-jd-dailybonus
 rm -rf ./package/lean/luci-lib-docker
 
 # 替换index.htm文件 X86
-wget -O ./package/lean/autocore/files/arm/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/index_N1.htm
+wget -O ./package/lean/autocore/files/arm/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/index/index_N1.htm
 
 # 替换banner
 wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/banner
+
+# 替换adguardhome Makefie
+wget -O ./feeds/kiss/AdGuardHome/adguardhome/Makefile https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/adguardhome/Makefile
+
+# 替换luci-app-adguardhome AdGuardHome
+wget -O ./feeds/kiss/luci-app-adguardhome/root/etc/config/AdGuardHome https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/luci-app-adguardhome/AdGuardHome
