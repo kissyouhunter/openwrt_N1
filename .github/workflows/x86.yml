@@ -32,6 +32,7 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: false
   SERVERCHAN_SCKEY: true
+  BOT: true
   TZ: Asia/Shanghai
 
 jobs:
