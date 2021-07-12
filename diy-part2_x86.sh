@@ -38,3 +38,6 @@ echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 #themes
 #git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly package/luci-theme-Butterfly
 #git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly-dark package/luci-theme-Butterfly-dark
+
+# 替换coremark ./lede/feeds/packages/utils/coremark/coremark.sh
+wget -O ./feeds/packages/utils/coremark/coremark.sh https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/coremark.sh
