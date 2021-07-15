@@ -39,5 +39,33 @@ echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 #git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly package/luci-theme-Butterfly
 #git clone https://github.com/Leo-Jo-My/luci-theme-Butterfly-dark package/luci-theme-Butterfly-dark
 
-# 替换coremark ./lede/feeds/packages/utils/coremark/coremark.sh
+#替换coremark ./lede/feeds/packages/utils/coremark/coremark.sh
 wget -O ./feeds/packages/utils/coremark/coremark.sh https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/coremark.sh
+
+##更改插件位置
+
+#ZeroTier
+
+sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/controller/*.lua
+
+sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/model/cbi/zerotier/*.lua
+
+sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/view/zerotier/*.htm
+
+#wrtbwmon 实时流量监测
+
+sed -i 's/nlbw/network/g' ./package/lean/luci-app-wrtbwmon/luasrc/controller/*.lua
+
+sed -i 's/nlbw/network/g' ./package/lean/luci-app-wrtbwmon/luasrc/model/cbi/wrtbwmon/*.lua
+
+sed -i 's/nlbw/network/g' ./package/lean/luci-app-wrtbwmon/luasrc/view/wrtbwmon/*.htm
+
+#cpulimit cpu限制
+
+sed -i 's/\<control\>/services/g' ./feeds/kiss/luci-app-cpulimit/luasrc/controller/*.lua
+
+sed -i 's/control/services/g' ./feeds/kiss/luci-app-cpulimit/luasrc/model/cbi/*.lua
+
+#nlbwmon  网络带宽监视器
+
+sed -i 's/"admin", "nlbw"/"admin", "network", "nlbw"/g' ./feeds/luci/applications/luci-app-nlbwmon/luasrc/controller/*.lua
