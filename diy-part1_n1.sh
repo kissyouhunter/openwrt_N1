@@ -22,6 +22,7 @@ echo 'src-git amlogic https://github.com/ophub/luci-app-amlogic' >>feeds.conf.de
 rm -rf ./package/lean/luci-app-netdata
 rm -rf ./package/lean/luci-app-jd-dailybonus
 rm -rf ./package/lean/luci-lib-docker
+rm -rf ./package/lean/luci-app-cpufreq
 
 # 替换index.htm文件 n1
 wget -O ./package/lean/autocore/files/arm/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/index/index_N1.htm
