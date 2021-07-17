@@ -65,6 +65,7 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
+        cat /proc/cpuinfo | grep 'model name' | head -1
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
@@ -99,7 +100,7 @@ jobs:
     - name: chmod
       run: |
         cd openwrt
-        chmod -R 755 .
+        chmod -R 777 .
         
     - name: Download package
       id: package
