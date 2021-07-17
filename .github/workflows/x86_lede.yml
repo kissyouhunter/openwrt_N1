@@ -65,15 +65,9 @@ jobs:
       working-directory: /workdir
       run: |
         df -hT $PWD
+        lscpu
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
-    - name: Gather infos
-      run: |
-        cd openwrt
-        wget https://raw.githubusercontent.com/kissyouhunter/openwrt/main/common.sh
-        chmod +x common.sh
-        source common.sh
 
     - name: Load custom feeds
       run: |
