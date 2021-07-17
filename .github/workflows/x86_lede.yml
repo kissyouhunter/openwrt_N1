@@ -32,7 +32,6 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: false
   SERVERCHAN_SCKEY: true
-  COMMON_SH: common.sh
   TZ: Asia/Shanghai
 
 jobs:
@@ -71,9 +70,10 @@ jobs:
 
     - name: Gather infos
       run: |
-        chmod +x $COMMON_SH
         cd openwrt
-        &GITHUB_WORKSPACE/$COMMON_SH
+        wget https://raw.githubusercontent.com/kissyouhunter/openwrt/main/common.sh
+        chmod +x common.sh
+        source common.sh
 
     - name: Load custom feeds
       run: |
