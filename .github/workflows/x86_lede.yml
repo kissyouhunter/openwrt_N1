@@ -68,9 +68,6 @@ jobs:
         df -hT $PWD
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-
-    - name: Gather infos
-      run: |
         chmod +x $COMMON_SH
         cd openwrt
         $GITHUB_WORKSPACE/$common_sh
