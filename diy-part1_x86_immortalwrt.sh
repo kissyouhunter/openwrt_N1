@@ -18,12 +18,12 @@
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
 # echo '删除重复插件'
-rm -rf ./package/lean/luci-app-netdata
-rm -rf ./package/lean/luci-app-jd-dailybonus
-rm -rf ./package/lean/luci-lib-docker
+#rm -rf ./package/lean/luci-app-netdata
+#rm -rf ./package/lean/luci-app-jd-dailybonus
+#rm -rf ./package/lean/luci-lib-docker
 
 # 替换index.htm文件 X86
-wget -O ./package/lean/autocore/files/x86/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/index_x86.htm
+#wget -O ./package/lean/autocore/files/x86/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/index_x86.htm
 
 # 替换banner
-wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/banner
+#wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/banner
