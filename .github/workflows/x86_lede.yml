@@ -71,7 +71,7 @@ jobs:
 
     - name: Gather infos
       run: |
-        chmod +x &COMMON_SH
+        chmod +x $COMMON_SH
         cd openwrt
         &GITHUB_WORKSPACE/$COMMON_SH
 
