@@ -100,7 +100,7 @@ jobs:
     - name: chmod
       run: |
         cd openwrt
-        chmod -R 777 .
+        chmod -R 755 .
         
     - name: Download package
       id: package
