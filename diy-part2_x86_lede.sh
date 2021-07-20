@@ -29,10 +29,6 @@ echo "echo \"DISTRIB_REVISION='${version} $(TZ=UTC-8 date "+%Y.%m.%d") powered b
 sed -i '/exit 0/d' package/lean/default-settings/files/zzz-default-settings
 echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 
-# 下载插件
-svn co https://github.com/kissyouhunter/openwrt-packages/trunk/luci-app-poweroff ./package/luci-app-poweroff
-svn co https://github.com/kissyouhunter/openwrt-packages/trunk/luci-app-netdata ./package/luci-app-netdate
-
 #替换coremark ./lede/feeds/packages/utils/coremark/coremark.sh
 wget -O ./feeds/packages/utils/coremark/coremark.sh https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_lede/coremark.sh
 
