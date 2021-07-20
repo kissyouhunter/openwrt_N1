@@ -17,10 +17,9 @@
 #echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
 #echo 'src-git passwall https://github.com/xiaorouji/openwrt-passwall' >>feeds.conf.default
 
-# echo '删除重复插件'
-#rm -rf ./package/lean/luci-app-netdata
-#rm -rf ./package/lean/luci-app-jd-dailybonus
-#rm -rf ./package/lean/luci-lib-docker
+# 下载插件
+svn co https://github.com/kissyouhunter/openwrt-packages/trunk/luci-app-poweroff ./package/luci-app-poweroff
+svn co https://github.com/kissyouhunter/openwrt-packages/trunk/luci-app-netdata ./package/luci-app-netdate
 
 # 替换index.htm文件 X86
 wget -O ./package/emortal/autocore/files/x86 https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_immortalwrt/index_x86_immortalwrt.htm
