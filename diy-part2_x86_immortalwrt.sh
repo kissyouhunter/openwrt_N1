@@ -49,7 +49,7 @@ rm -rf ./feeds/luci//collections/luci-lib-docker
 
 #ZeroTier
 
-sed -i 's/vpn/network/g' ./feeds/luci/applications/luasrc/controller/*.lua
+sed -i 's/vpn/network/g' ./feeds/luci/applications/luci-app-zerotier/luasrc/controller/*.lua
 
 #sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/model/cbi/zerotier/*.lua
 
