@@ -43,7 +43,7 @@ echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 #wget -O ./feeds/kiss/AdGuardHome/adguardhome/Makefile https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/adguardhome/Makefile
 
 # 替换luci-app-adguardhome AdGuardHome
-wget -O ./feeds/kiss/luci-app-adguardhome/root/etc/config/AdGuardHome https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/luci-app-adguardhome/AdGuardHome
+#wget -O ./feeds/kiss/luci-app-adguardhome/root/etc/config/AdGuardHome https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1/luci-app-adguardhome/AdGuardHome
 
 ##更改插件位置
 
