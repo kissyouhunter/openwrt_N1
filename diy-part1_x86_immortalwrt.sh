@@ -23,7 +23,7 @@
 #rm -rf ./package/lean/luci-lib-docker
 
 # 替换index.htm文件 X86
-#wget -O ./package/lean/autocore/files/x86/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/index_x86.htm
+wget -O ./package/emortal/autocore/files/x86 https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_immortalwrt/index_x86_immortalwrt.htm
 
 # 替换banner
-#wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86/banner
+#wget -O ./package/emortal/default-settings/files/openwrt_banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_lede/banner
