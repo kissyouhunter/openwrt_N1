@@ -21,6 +21,7 @@
 rm -rf ./package/lean/luci-app-netdata
 rm -rf ./package/lean/luci-app-jd-dailybonus
 rm -rf ./package/lean/luci-lib-docker
+rm -rf ./package/lean/luci-app-cpufreq
 
 # 替换index.htm文件 X86
 wget -O ./package/lean/autocore/files/x86/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_lede/index_x86.htm
