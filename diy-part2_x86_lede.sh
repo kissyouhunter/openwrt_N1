@@ -25,7 +25,7 @@ echo "#iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE" >> package/network/
 #sed -i "s/Openwrt/N1/g" package/lean/default-settings/files/zzz-default-settings
 version=$(grep "DISTRIB_REVISION=" package/lean/default-settings/files/zzz-default-settings  | awk -F "'" '{print $2}')
 sed -i '/DISTRIB_REVISION/d' package/lean/default-settings/files/zzz-default-settings
-echo "echo \"DISTRIB_REVISION='${version} $(TZ=UTC-8 date "+%Y.%m.%d") powered by kissyouhunter '\" >> /etc/openwrt_release" >> package/lean/default-settings/files/zzz-default-settings
+echo "echo \"DISTRIB_REVISION='${version} $(TZ=UTC+8 date "+%Y.%m.%d") powered by kissyouhunter '\" >> /etc/openwrt_release" >> package/lean/default-settings/files/zzz-default-settings
 sed -i '/exit 0/d' package/lean/default-settings/files/zzz-default-settings
 echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 
