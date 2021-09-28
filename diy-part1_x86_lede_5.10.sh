@@ -30,5 +30,5 @@ wget -O ./package/lean/autocore/files/x86/index.htm https://raw.githubuserconten
 wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_lede/banner
 
 # 替换内核
-
+sed -i 's/PATCHVER:=5.4/PATCHVER:=5.10/g' ./target/linux/x86/Makefile
 wget -O ./target/linux/x86/Makefile https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_lede/Makefile_for_kernel_5.10
