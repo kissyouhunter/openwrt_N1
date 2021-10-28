@@ -103,7 +103,7 @@ jobs:
       uses: klever1988/cachewrtbuild@test
       with:
         ccache: 'true'
-        prefix: ${{ github.workspace }}/openwrt
+        prefix: workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: chmod
       run: |
