@@ -25,7 +25,7 @@ rm -rf ./package/lean/luci-lib-docker
 rm -rf ./package/lean/luci-app-cpufreq
 
 # 替换index.htm文件 n1
-wget -O ./package/lean/autocore/files/arm/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/n1_lede/index/index_N1.htm
+wget -O ./package/lean/autocore/files/arm/index.htm https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/index/index_N1.htm
 
 # 替换banner
 wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt/main/diy/x86_lede/banner
