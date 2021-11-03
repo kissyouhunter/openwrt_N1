@@ -79,6 +79,6 @@ sed -i 's|https.*/OpenWrt|https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N
 
 sed -i 's|ARMv8|openwrt_n1|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
-sed -i 's|opt/kernel|https://github.com/kissyouhunter/kernel_N1/tree/main/kernel' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
+sed -i 's|opt/kernel|https://github.com/kissyouhunter/kernel_N1/tree/main/kernel|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
-sed -i 's|500000|1000000' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
+sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
