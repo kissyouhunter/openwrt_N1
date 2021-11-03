@@ -77,7 +77,7 @@ sed -i 's/control/services/g' ./feeds/kiss/luci-app-cpulimit/luasrc/model/cbi/*.
 
 sed -i "s|https.*/OpenWrt|https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1|g" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
-sed -i "s|ARMv8|openwrt_n1|g" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic.
+sed -i "s|ARMv8|openwrt_n1|g" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
 sed -i "s|opt/kernel|https://github.com/kissyouhunter/kernel_N1/tree/main/kernel" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
