@@ -57,7 +57,7 @@ sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/view/zerotier/*
 
 #wrtbwmon 实时流量监测
 
-sed -i 's/"admin", "nlbw"/"admin", "network", "nlbw"/g' ./package/lean/luci-app-wrtbwmon/luasrc/controller/*.lua
+#sed -i 's/"admin", "nlbw"/"admin", "network", "nlbw"/g' ./package/lean/luci-app-wrtbwmon/luasrc/controller/*.lua
 
 #sed -i 's/nlbw/network/g' ./package/lean/luci-app-wrtbwmon/luasrc/model/cbi/wrtbwmon/*.lua
 
@@ -71,4 +71,14 @@ sed -i 's/control/services/g' ./feeds/kiss/luci-app-cpulimit/luasrc/model/cbi/*.
 
 #nlbwmon  网络带宽监视器
 
-sed -i 's/"admin", "nlbw"/"admin", "network", "nlbw"/g' ./feeds/luci/applications/luci-app-nlbwmon/luasrc/controller/*.lua
+#sed -i 's/"admin", "nlbw"/"admin", "network", "nlbw"/g' ./feeds/luci/applications/luci-app-nlbwmon/luasrc/controller/*.lua
+
+#luci-app-amlogic 晶晨宝盒
+
+sed -i "s|https.*/OpenWrt|https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1|g" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
+
+sed -i "s|ARMv8|openwrt_n1|g" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic.
+
+sed -i "s|opt/kernel|https://github.com/kissyouhunter/kernel_N1/tree/main/kernel" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
+
+sed -i "s|500000|1000000" ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
