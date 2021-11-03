@@ -32,7 +32,7 @@ env:
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: false
   SERVERCHAN_SCKEY: true
-  USE_CACHEWRTBUILD: true
+  USE_CACHEWRTBUILD: false
   TZ: Asia/Shanghai
 
 jobs:
