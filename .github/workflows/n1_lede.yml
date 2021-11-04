@@ -46,6 +46,7 @@ jobs:
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
           您正在使用kissyouhunter仓库的lede_n1.config编译您自己的固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
+        
     - name: MachineType
       run: |
         cat /proc/cpuinfo
