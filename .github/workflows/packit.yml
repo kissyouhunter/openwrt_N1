@@ -49,8 +49,8 @@ jobs:
         
     - name: Installing requirements 
       run: |
-        sudo apt update
-        sudo apt install -y subverion
+        sudo apt-get update
+        sudo apt-get install -y subverion
 
     - name: Check space usage
       if: (!cancelled())
