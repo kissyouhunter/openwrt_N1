@@ -37,36 +37,20 @@ jobs:
           您正在使用kissyouhunter仓库的lede_n1.config编译您自己的固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
         
-    - name: MachineType
-      run: |
-        cat /proc/cpuinfo
-        cat /proc/meminfo
-        cat /etc/issue
-        cat /proc/version            
-        
     - name: Checkout
-      uses: actions/checkout@main
-
-    - name: Initialization environment
-      env:
-        DEBIAN_FRONTEND: noninteractive
+      uses: actions/checkout@v2.3.4
+    - name: Host info
       run: |
-        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get -qq update
-        sudo -E apt-get -qq install $(curl -fsSL git.io/ubuntu-2004-server)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
-        sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /workdir
-        sudo chown $USER:$GROUPS /workdir
-        ARR_BOARD=("lepotato" "odroidn2")
-        if  [[ -n "${{ github.event.inputs.set_board }}" && -n "$(echo "${ARR_BOARD[@]}" | grep -w "${{ github.event.inputs.set_board }}")" ]]; then
-            set_board="${{ github.event.inputs.set_board }}"
-        else
-            set_board="lepotato"
-        fi
-        echo "ARMBIAN_BOARD=${set_board}" >> $GITHUB_ENV
-        echo "COMPILE_STARTINGTIME=$(date +"%Y.%m.%d.%H%M")" >> $GITHUB_ENV
+        pwd
+        ls -lah
+        lscpu
+        free -h
+        df -h 
+        
+    - name: Installing requirements 
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison libncurses-dev autoconf dkms libudev-dev libpci-dev libiberty-dev u-boot-tools lzop
 
     - name: Check space usage
       if: (!cancelled())
@@ -90,16 +74,16 @@ jobs:
         cd /tmp/packit
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.4.y.env make.env -v
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/KERNEL5.4.Y
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL5.4.Y
         mv KERNEL5.4.Y/* ./
         sudo bash mk_s905d_n1-docker.sh
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.10.y.env make.env -v
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/KERNEL5.10.Y
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL5.10.Y
         mv KERNEL5.110.Y/* ./
         sudo bash mk_s905d_n1-docker.sh
         rm -f make.env
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/KERNEL5.15.Y
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL5.15.Y
         mv KERNEL5.15.Y/* ./
         cp $GITHUB_WORKSPACE/kernel/$KERNEL5.15.Y/* ./
         sudo bash mk_s905d_n1-docker.sh
