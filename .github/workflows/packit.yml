@@ -37,20 +37,28 @@ jobs:
           您正在使用kissyouhunter仓库的lede_n1.config编译您自己的固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
         
-    - name: Checkout
-      uses: actions/checkout@v2.3.4
-    - name: Host info
+    - name: MachineType
       run: |
-        pwd
-        ls -lah
-        lscpu
-        free -h
-        df -h 
+        cat /proc/cpuinfo
+        cat /proc/meminfo
+        cat /etc/issue
+        cat /proc/version            
         
-    - name: Installing requirements 
+    - name: Checkout
+      uses: actions/checkout@main
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo apt-get update
-        sudo apt-get install -y fakeroot subverion
+        sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get -qq clean
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
 
     - name: Check space usage
       if: (!cancelled())
