@@ -1,0 +1,35 @@
+--- a/usr/lib/lua/luci/view/admin_status/index.htm	2021-06-20 15:48:25.564959247 +0800
++++ b/usr/lib/lua/luci/view/admin_status/index.htm	2021-06-20 15:53:59.134455092 +0800
+@@ -669,11 +669,17 @@
+			if (e = document.getElementById('memtotal'))
+				e.innerHTML = progressbar(
+					Math.floor(((info.memory.free + info.memory.buffered) / 1048576) + (info.memcached / 1024)) + " <%:MB%>",
+					Math.floor(info.memory.total / 1048576) + " <%:MB%>"
+				);
++
++			if (e = document.getElementById('memfree'))
++				e.innerHTML = progressbar(
++					Math.floor(info.memory.free / 1048576) + " <%:MB%>",
++					Math.floor(info.memory.total / 1048576) + " <%:MB%>"
++				);
+
+			if (e = document.getElementById('membuff'))
+				e.innerHTML = progressbar(
+					Math.floor(info.memory.buffered / 1048576) + " <%:MB%>",
+					Math.floor(info.memory.total / 1048576) + " <%:MB%>"
+				);
+@@ -704,7 +704,7 @@
+ 	<table width="100%" cellspacing="10">
+ 		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
+ 		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or "?")%> <%=luci.sys.exec("cat /etc/bench.log") or " "%></td></tr>
+-		<tr><td width="33%"><%:Architecture%></td><td><%=pcdata(boardinfo.system or "ARMv8 Processor")%> x <%=luci.sys.exec("cat /proc/cpuinfo | grep 'processor' | wc -l") or "1"%></td></tr>
++		<tr><td width="33%"><%:Architecture%></td><td><%=luci.sys.exec("/usr/bin/cpustat -a")%></td></tr>
+ 		<tr><td width="33%"><%:Firmware Version%></td><td>
+ 			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
+ 			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
+@@ -724,4 +724,5 @@
+	<table width="100%" cellspacing="10">
+		<tr><td width="33%"><%:Total Available%></td><td id="memtotal">-</td></tr>
++		<tr><td width="33%"><%:Free%></td><td id="memfree">-</td></tr>
+		<tr><td width="33%"><%:Buffered%></td><td id="membuff">-</td></tr>
+	</table>
