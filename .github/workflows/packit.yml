@@ -99,7 +99,7 @@ jobs:
         echo "::set-output name=status::success"
 
     - name: Upload firmware directory
-        uses: kittaakos/upload-artifact-as-is@master
+      uses: kittaakos/upload-artifact-as-is@master
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         #name: OpenWrt_firmware_N1
