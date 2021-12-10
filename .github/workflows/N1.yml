@@ -34,7 +34,7 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库的lede_n1.config编译您自己的固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库的lede_n1.config编译您自己的固件并打包,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
         
     - name: MachineType
@@ -150,15 +150,18 @@ jobs:
         cd /tmp/packit
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.4.y.env make.env -v
-        cp $GITHUB_WORKSPACE/kernel/$KERNEL5.4.Y/* ./
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_4_Y
+        mv $KERNEL_5_4_Y/* ./
         sudo bash mk_s905d_n1-docker.sh
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.10.y.env make.env -v
-        cp $GITHUB_WORKSPACE/kernel/$KERNEL5.10.Y/* ./
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_10_Y
+        mv $KERNEL_5_10_Y/* ./
         sudo bash mk_s905d_n1-docker.sh
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.15.y.env make.env -v
-        cp $GITHUB_WORKSPACE/kernel/$KERNEL5.15.Y/* ./
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_15_Y
+        mv $KERNEL_5_15_Y/* ./
         sudo bash mk_s905d_n1-docker.sh
 
     - name: Organize files
@@ -175,7 +178,7 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        #name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
     - name: Delete workflow runs
@@ -188,5 +191,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库的lede_n1.config固件顺利编译完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库的lede_n1.config固件顺利编译完成了,并且打包完毕！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
