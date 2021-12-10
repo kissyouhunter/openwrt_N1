@@ -49,8 +49,8 @@ jobs:
         
     - name: Installing requirements 
       run: |
-        sudo apt-get update
-        sudo apt-get install -y git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison libncurses-dev autoconf dkms libudev-dev libpci-dev libiberty-dev u-boot-tools lzop
+        sudo apt update
+        sudo apt install -y subverion
 
     - name: Check space usage
       if: (!cancelled())
