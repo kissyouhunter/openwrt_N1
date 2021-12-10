@@ -20,6 +20,9 @@ env:
   UPLOAD_FIRMWARE: true
   SERVERCHAN_SCKEY: true
   USE_CACHEWRTBUILD: true
+  KERNEL5.4.Y: 5.4.164
+  KERNEL5.10.Y: 5.10.84
+  KERNEL5.15.Y: 5.15.7
   TZ: Asia/Shanghai
 
 jobs:
@@ -147,12 +150,15 @@ jobs:
         cd /tmp/packit
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.4.y.env make.env -v
+        cp $GITHUB_WORKSPACE/kernel/$KERNEL5.4.Y/* ./
         sudo bash mk_s905d_n1-docker.sh
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.10.y.env make.env -v
+        cp $GITHUB_WORKSPACE/kernel/$KERNEL5.10.Y/* ./
         sudo bash mk_s905d_n1-docker.sh
         rm -f make.env
         cp $GITHUB_WORKSPACE/make_kernel_5.15.y.env make.env -v
+        cp $GITHUB_WORKSPACE/kernel/$KERNEL5.15.Y/* ./
         sudo bash mk_s905d_n1-docker.sh
 
     - name: Organize files
