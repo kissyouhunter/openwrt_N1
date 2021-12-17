@@ -28,13 +28,13 @@ check_file ${DTBS_TGZ}
 ###########################################################################
 
 # Openwrt root 源文件
-OP_ROOT_TGZ="openwrt-armvirt-64-default-rootfs.tar.gz"
+OP_ROOT_TGZ="openwrt-armvirt-64-default-rootfs-docker.tar.gz"
 OPWRT_ROOTFS_GZ="${PWD}/${OP_ROOT_TGZ}"
 check_file ${OPWRT_ROOTFS_GZ}
 echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 
 # 目标镜像文件
-TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
+TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}-docker.img"
 
 # 补丁和脚本
 ###########################################################################
@@ -123,6 +123,10 @@ BTLD_BIN="${PWD}/files/s905d/u-boot-2015-phicomm-n1.bin"
 
 # 20211024 add
 MODEL_DB="${PWD}/files/amlogic_model_database.txt"
+# 20211214 add
+P7ZIP="${PWD}/files/7z"
+# 20211217 add
+DDBR="${PWD}/files/openwrt-ddbr"
 ###########################################################################
 
 check_depends
@@ -135,7 +139,7 @@ create_image "$TGT_IMG" "$SIZE"
 create_partition "$TGT_DEV" "msdos" "$SKIP_MB" "$BOOT_MB" "fat32" "0" "-1" "btrfs"
 make_filesystem "$TGT_DEV" "B" "fat32" "BOOT" "R" "btrfs" "ROOTFS"
 mount_fs "${TGT_DEV}p1" "${TGT_BOOT}" "vfat"
-mount_fs "${TGT_DEV}p2" "${TGT_ROOT}" "btrfs" "compress=zstd"
+mount_fs "${TGT_DEV}p2" "${TGT_ROOT}" "btrfs" "compress=zstd:${ZSTD_LEVEL}"
 echo "创建 /etc 子卷 ..."
 btrfs subvolume create $TGT_ROOT/etc
 extract_rootfs_files
@@ -156,7 +160,7 @@ FDT=/dtb/amlogic/meson-gxl-s905d-phicomm-n1.dtb
 # 用于 Phicomm N1 (thresh)
 #FDT=/dtb/amlogic/meson-gxl-s905d-phicomm-n1-thresh.dtb
 
-APPEND=root=UUID=${ROOTFS_UUID} rootfstype=btrfs rootflags=compress=zstd console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
+APPEND=root=UUID=${ROOTFS_UUID} rootfstype=btrfs rootflags=compress=zstd:${ZSTD_LEVEL} console=ttyAML0,115200n8 console=tty0 no_console_suspend consoleblank=0 fsck.fix=yes fsck.repair=yes net.ifnames=0 cgroup_enable=cpuset cgroup_memory=1 cgroup_enable=memory swapaccount=1
 EOF
 
 echo "uEnv.txt -->"
