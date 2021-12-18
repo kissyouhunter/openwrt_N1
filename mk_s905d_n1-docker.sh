@@ -28,13 +28,13 @@ check_file ${DTBS_TGZ}
 ###########################################################################
 
 # Openwrt root 源文件
-OP_ROOT_TGZ="openwrt-armvirt-64-default-rootfs-docker.tar.gz"
+OP_ROOT_TGZ="openwrt-armvirt-64-default-rootfs.tar.gz"
 OPWRT_ROOTFS_GZ="${PWD}/${OP_ROOT_TGZ}"
 check_file ${OPWRT_ROOTFS_GZ}
 echo "Use $OPWRT_ROOTFS_GZ as openwrt rootfs!"
 
 # 目标镜像文件
-TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}-docker.img"
+TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${SUBVER}.img"
 
 # 补丁和脚本
 ###########################################################################
