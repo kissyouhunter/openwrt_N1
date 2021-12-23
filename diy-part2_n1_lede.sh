@@ -82,3 +82,7 @@ sed -i 's|ARMv8|openwrt_n1|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/a
 sed -i 's|opt/kernel|https://github.com/kissyouhunter/kernel_N1/tree/main/kernel|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
 sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
+
+#store 商店
+
+sed -i 's/"admin", "store"/"admin", "services", "store"/g' ./feeds/kiss/luci-app-store/luasrc/controller/*.lua
