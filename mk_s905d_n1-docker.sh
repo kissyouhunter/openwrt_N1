@@ -48,7 +48,6 @@ CPUSTAT_SCRIPT="${PWD}/files/cpustat"
 CPUSTAT_SCRIPT_PY="${PWD}/files/cpustat.py"
 CPUSTAT_PATCH="${PWD}/files/luci-admin-status-index-html.patch"
 CPUSTAT_PATCH_02="${PWD}/files/luci-admin-status-index-html-02.patch"
-CPUSTAT_PATCH_03="${PWD}/files/luci-admin-status-index-html-03.patch"
 GETCPU_SCRIPT="${PWD}/files/getcpu"
 TTYD="${PWD}/files/ttyd"
 FLIPPY="${PWD}/files/scripts_deprecated/flippy_cn"
@@ -185,6 +184,7 @@ use_xrayplug_replace_v2rayplug
 create_fstab_config
 adjust_turboacc_config
 adjust_ntfs_config
+adjust_mosdns_config
 patch_admin_status_index_html
 adjust_kernel_env
 copy_uboot_to_fs

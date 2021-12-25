@@ -18,7 +18,7 @@
 					Math.floor(info.memory.buffered / 1048576) + " <%:MB%>",
 					Math.floor(info.memory.total / 1048576) + " <%:MB%>"
 				);
-@@ -704,17 +704,17 @@
+@@ -704,7 +704,7 @@
  	<table width="100%" cellspacing="10">
  		<tr><td width="33%"><%:Hostname%></td><td><%=luci.sys.hostname() or "?"%></td></tr>
  		<tr><td width="33%"><%:Model%></td><td><%=pcdata(boardinfo.model or "?")%> <%=luci.sys.exec("cat /etc/bench.log") or " "%></td></tr>
@@ -27,17 +27,7 @@
  		<tr><td width="33%"><%:Firmware Version%></td><td>
  			<%=pcdata(ver.distname)%> <%=pcdata(ver.distversion)%> /
  			<%=pcdata(ver.luciname)%> (<%=pcdata(ver.luciversion)%>)
-		</td></tr>
-		<tr><td width="33%"><%:Kernel Version%></td><td><%=unameinfo.release or "?"%></td></tr>
-		<tr><td width="33%"><%:Local Time%></td><td id="localtime">-</td></tr>
-		<tr><td width="33%"><%:Uptime%></td><td id="uptime">-</td></tr>
-		<tr><td width="33%"><%:CPU状态%></td><td id="cpustat">-</td></tr>
-		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
-		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
-		<tr><td width="33%"><%:编译作者%></td><td><a href="https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1" target="_blank">kisyouhunter</a>
-	</table>
-</fieldset>
-@@ -724,4 +724,5 @@
+@@ -725,4 +725,5 @@
 	<table width="100%" cellspacing="10">
 		<tr><td width="33%"><%:Total Available%></td><td id="memtotal">-</td></tr>
 +		<tr><td width="33%"><%:Free%></td><td id="memfree">-</td></tr>
