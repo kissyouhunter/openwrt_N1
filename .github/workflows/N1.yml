@@ -144,7 +144,7 @@ jobs:
         rm -f luci-admin-status-index-html.patch
         cp $GITHUB_WORKSPACE/luci-admin-status-index-html.patch luci-admin-status-index-html.patch -v       
         rm -f luci-admin-status-index-html-02.patch
-        cp $GITHUB_WORKSPACE/luci-admin-status-index-html-02.patch luci-admin-status-index-html-02.patch -v\
+        cp $GITHUB_WORKSPACE/luci-admin-status-index-html-02.patch luci-admin-status-index-html-02.patch -v
         rm -f amlogic_model_database.txt
         cp $GITHUB_WORKSPACE/amlogic_model_database.txt amlogic_model_database.txt -v
         rm -f openwrt-install-amlogic
