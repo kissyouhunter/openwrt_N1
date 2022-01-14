@@ -94,19 +94,22 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
-
+ 
+        
+    - name: chmod
+      run: |
+        cd openwrt
+        mkdir -p files/usr/sbin
+        cp $GITHUB_WORKSPACE/diy/n1_lede/usr/sbin/update files/usr/sbin/update -v
+        chmod -R 755 .
+ 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}     
-        
-    - name: chmod
-      run: |
-        cd openwrt
-        chmod -R 755 .
-        
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}    
+ 
     - name: Download package
       id: package
       run: |
