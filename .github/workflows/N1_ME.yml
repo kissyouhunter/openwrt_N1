@@ -100,11 +100,13 @@ jobs:
       if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
       env:
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}     
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
     - name: chmod
       run: |
         cd openwrt
+        mkdir -p files/usr/sbin
+        cp $GITHUB_WORKSPACE/diy/n1_lede/usr/sbin/update files/usr/sbin/update -v 
         chmod -R 755 .
         
     - name: Download package
