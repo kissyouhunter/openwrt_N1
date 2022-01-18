@@ -15,7 +15,7 @@ env:
   FEEDS_CONF: lede.feeds.conf.default
   CONFIG_FILE: n1_lede_docker.config
   DIY_P1_SH: diy-part1_n1_lede.sh
-  DIY_P2_SH: diy-part2_n1_lede.sh
+  DIY_P2_SH: diy-part2_n1_lede_me.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   SERVERCHAN_SCKEY: true
