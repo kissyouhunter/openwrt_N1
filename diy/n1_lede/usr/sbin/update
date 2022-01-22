@@ -1,10 +1,4 @@
-#!/bin/bash
-#author kissyouhunter
-
-declare flag=0
-clear
-while [ "$flag" -eq 0 ]
-do
+#/bin/bash
 
 TIME() {
 [[ -z "$1" ]] && {
@@ -14,7 +8,7 @@ TIME() {
 	r) export Color="\e[31;1m";;
 	g) export Color="\e[32;1m";;
 	b) export Color="\e[34;1m";;
-	y) export Color="\e[33;1m";;
+	y) export Color="\e[33;0m";;
 	z) export Color="\e[35;1m";;
 	l) export Color="\e[36;1m";;
       esac
@@ -24,44 +18,38 @@ TIME() {
       }
 }
 
-TIME g "============================================"
-TIME g "       欢迎使用N1——openwrt更新脚本"
-TIME g "          请确认N1可以科学上网"
-TIME g "          根据提示输入对应数值 "
-TIME g "============================================"
-
-TIME b "(1) G胸 N1 固件!"
-TIME z "(2) K胸 N1 固件!"
-TIME l "(0) 怂了，不更新了！"
-
-read -p "Please enter your choice[0-2]: " input
-case $input in
-#G胸 N1 固件
+while :; do
+echo
+TIME g "---- N1固件 在线更新菜单 ----"
+echo
+TIME g "[1] 更新 gd772 编译的 N1固件"
+echo
+TIME g "[2] 更新  kiss 编译的 N1固件"
+echo
+TIME g "[0] 继续做 钉子户 退出更新!"
+TIME g "-------------------------------"
+read -p " 请输入 序号 敲回车确认： " CHOOSE
+case $CHOOSE in
 1)
-clear
-TIME g " >>>>>>>>>>>跳转中，请稍等 ......"
-bash <(curl -Lso- https://git.io/Phicomm-n1_update)
+echo
+bash <(curl -Lso- https://pan.gd772.com/d/update/AutoUpdate.sh)
+break
 ;;
-#K胸 N1 固件
 2)
-clear
-TIME g " >>>>>>>>>>>跳转中，请稍等 ......"
+echo
 bash <(curl -s -S -L https://git.io/update-N1)
+break
 ;;
 0)
-clear
+echo
+TIME g "[0] 继续做 钉子户 退出本次更新"
+echo
 exit 0
+break
 ;;
-*)  TIME r "----------------------------------"
- TIME r "|          Warning!!!            |"
- TIME r "|       请输入正确的选项!        |"
- TIME r "----------------------------------"
- for i in `seq -w 3 -1 1`
-   do
-     TIME r "$i";
-     sleep 1;
-   done
- clear
+*)
+echo
+TIME r "请输入正确的序号!"
 ;;
 esac
 done
