@@ -173,6 +173,11 @@ jobs:
         svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_15_Y
         mv $KERNEL_5_15_Y/* ./
         sudo bash mk_s905d_n1-docker.sh
+        rm -f make.env
+        cp $GITHUB_WORKSPACE/make_kernel_5.16.y.env make.env -v
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_16_Y
+        mv $KERNEL_5_16_Y/* ./
+        sudo bash mk_s905d_n1-docker.sh
 
     - name: Organize files
       id: organize
