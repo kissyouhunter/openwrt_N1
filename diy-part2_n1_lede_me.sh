@@ -88,6 +88,6 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 
 sed -i 's/"admin", "store"/"admin", "services", "store"/g' ./feeds/kiss/luci-app-store/luasrc/controller/*.lua
 
-sed -i '21c #' ./package/lean/default-settings/files/zzz-default-settings
-sed -i '22c #' ./package/lean/default-settings/files/zzz-default-settings
+#sed -i '21c #' ./package/lean/default-settings/files/zzz-default-settings
+#sed -i '22c #' ./package/lean/default-settings/files/zzz-default-settings
 
