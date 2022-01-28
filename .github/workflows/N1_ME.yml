@@ -20,9 +20,10 @@ env:
   UPLOAD_FIRMWARE: true
   SERVERCHAN_SCKEY: true
   USE_CACHEWRTBUILD: true
-  KERNEL_5_4_Y: 5.4.172
-  KERNEL_5_10_Y: 5.10.92
-  KERNEL_5_15_Y: 5.15.15
+  KERNEL_5_4_Y: 5.4.174
+  KERNEL_5_10_Y: 5.10.94
+  KERNEL_5_15_Y: 5.15.17
+  KERNEL_5_16_Y: 5.16.3
   TZ: Asia/Shanghai
 
 jobs:
@@ -171,7 +172,12 @@ jobs:
         svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_15_Y
         mv $KERNEL_5_15_Y/* ./
         sudo bash mk_s905d_n1-docker.sh
-
+        rm -f make.env
+        cp $GITHUB_WORKSPACE/make_kernel_5.16.y.env make.env -v
+        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_16_Y
+        mv $KERNEL_5_16_Y/* ./
+        sudo bash mk_s905d_n1-docker.sh
+        
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
