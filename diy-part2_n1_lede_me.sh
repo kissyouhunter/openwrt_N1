@@ -90,3 +90,4 @@ sed -i 's/"admin", "store"/"admin", "services", "store"/g' ./feeds/kiss/luci-app
 
 sed -i '21c #' ./package/lean/default-settings/files/zzz-default-settings
 sed -i '22c #' ./package/lean/default-settings/files/zzz-default-settings
+
