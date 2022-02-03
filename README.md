@@ -11,4 +11,8 @@
 - VER:    22.1.1 / ...     输入大雕 openwrt-roofts 版本号（例：22.1.1），默认内容为22.1.1
 - KERNEL_URL：xxxxxxx      定义内核库链接（默认为本人库）
 ------------------------------------------------------------------
+#### 2、利用编译好的 roofts 再用F大脚本打包 （packit_new.yml） 简单说明：
+- 和1重复的部分，不再列举
+- ROOTFS_URL：xxxxxxx      定义内核roofts下载链接（roofts手动上传到releases里）
+------------------------------------------------------------------
 #### Actions-OpenWrt-N1 generated from P3TERX/Actions-OpenWrt
