@@ -1,0 +1,192 @@
+name: packit new
+
+on:
+  repository_dispatch:
+  workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'false'
+      set_54x:
+        description: "KERNEL: 5.4.x / none"
+        required: false
+        default: "none"
+       set_510x:
+        description: "KERNEL: 5.10.x / none"
+        required: false
+        default: "none"
+      set_515x:
+        description: "KERNEL: 5.15.x / none"
+        required: false
+        default: "none"
+      set_516x:
+        description: "KERNEL: 5.16.x / none"
+        required: false
+        default: "none"                       
+
+env:
+  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_BRANCH: master
+  FEEDS_CONF: lede.feeds.conf.default
+  CONFIG_FILE: n1_lede.config
+  DIY_P1_SH: diy-part1_n1_lede.sh
+  DIY_P2_SH: diy-part2_n1_lede.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  SERVERCHAN_SCKEY: true
+  USE_CACHEWRTBUILD: true
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: telegrame_bot
+      run: |
+        if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
+          您正在使用kissyouhunter仓库打包 N1 您自己的固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+        fi
+
+    - name: choose kernel
+      run: |
+        set_54x="${{ github.event.inputs.set_54x }}"
+        if [ "$set_54x" = "none" ]; then
+          skip
+        else
+          echo "KERNEL_5_4_Y=${set_54x}" >> $GITHUB_ENV
+        fi
+
+        set_510x="${{ github.event.inputs.set_510x }}"
+        if [ "$set_510x" = "none" ]; then
+          skip
+        else
+          echo "KERNEL_5_10_Y=${set_510x}" >> $GITHUB_ENV
+        fi
+
+        set_515x="${{ github.event.inputs.set_515x }}"
+        if [ "$set_515x" = "none" ]; then
+          skip
+        else
+          echo "KERNEL_5_15_Y=${set_515x}" >> $GITHUB_ENV
+        fi
+
+        set_516x="${{ github.event.inputs.set_516x }}"
+        if [ "$set_516x" = "none" ]; then
+          skip
+        else
+          echo "KERNEL_5_16_Y=${set_516x}" >> $GITHUB_ENV
+        fi
+
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+    - name: Host info
+      run: |
+        pwd
+        ls -lah
+        lscpu
+        free -h
+        df -h 
+        
+    - name: Installing requirements 
+      run: |
+        sudo apt-get update
+        sudo apt-get install subversion -y
+
+    - name: Check space usage
+      if: (!cancelled())
+      run: df -hT
+
+    - name: Download Openwrt_Packit
+      id: packit
+      run: |
+        git clone https://github.com/unifreq/openwrt_packit.git /tmp/packit
+        sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
+        cd /tmp/packit
+        wget https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-default-rootfs.tar.gz
+        cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
+        cd /tmp/packit/files
+        rm -f luci-admin-status-index-html-02.patch
+        cp $GITHUB_WORKSPACE/luci-admin-status-index-html-02.patch luci-admin-status-index-html-02.patch -v
+
+    - name: Pack OpenWrt
+      id: pack
+      run: |
+        set_54x="${{ github.event.inputs.set_54x }}"
+        if [ "$set_54x" = "none" ]; then
+          skip
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel_5.4.y.env make.env -v
+          svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_4_Y
+          mv $KERNEL_5_4_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
+
+        set_510x="${{ github.event.inputs.set_510x }}"
+        if [ "$set_510x" = "none" ]; then
+          skip
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel_5.10.y.env make.env -v
+          svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_10_Y
+          mv $KERNEL_5_10_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
+
+        set_515x="${{ github.event.inputs.set_515x }}"
+        if [ "$set_515x" = "none" ]; then
+          skip
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel_5.15.y.env make.env -v
+          svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_15_Y
+          mv $KERNEL_5_15_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
+
+        set_516x="${{ github.event.inputs.set_516x }}"
+        if [ "$set_516x" = "none" ]; then
+          skip
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel_5.16.y.env make.env -v
+          svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_16_Y
+          mv $KERNEL_5_16_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
+      
+    - name: Organize files
+      id: organize
+      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      run: |
+        cd /tmp/packit/output
+        sudo gzip -9 *
+        sudo chmod 777 *
+        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+        echo "::set-output name=status::success"
+
+    - name: Upload firmware directory
+      uses: kittaakos/upload-artifact-as-is@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        path: ${{ env.FIRMWARE }}
+
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        retain_days: 1
+        keep_minimum_runs: 3
+
+    - name: telegram_bot
+      run: |
+        if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
+          您使用kissyouhunter仓库打包的 N1 固件顺利完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+        fi
