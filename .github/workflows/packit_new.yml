@@ -11,8 +11,11 @@ on:
       set_54x:
         description: "KERNEL: 5.4.x / none"
         required: false
-        default: "none"                     
-
+        default: "none"
+      set_510x:
+        description: "KERNEL: 5.10.x / none"
+        required: false
+        default: "none"
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
