@@ -32,6 +32,9 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
+  F_REPO_URL: https://github.com/unifreq/openwrt_packit
+  F_REPO_BRANCH: master
+  KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
   FEEDS_CONF: lede.feeds.conf.default
   CONFIG_FILE: n1_lede.config
   DIY_P1_SH: diy-part1_n1_lede.sh
@@ -40,10 +43,6 @@ env:
   UPLOAD_FIRMWARE: true
   SERVERCHAN_SCKEY: true
   USE_CACHEWRTBUILD: true
-  KERNEL_5_4_Y: 5.4.174
-  KERNEL_5_10_Y: 5.10.94
-  KERNEL_5_15_Y: 5.15.17
-  KERNEL_5_16_Y: 5.16.3
   TZ: Asia/Shanghai
 
 jobs:
@@ -57,7 +56,40 @@ jobs:
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
           您正在使用kissyouhunter仓库的lede_n1.config编译您自己的固件并打包,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
-        
+
+    - name: choose kernel
+      run: |
+        set_54x="${{ github.event.inputs.set_54x }}"
+        if [ "$set_54x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_5_4_Y=${set_54x}" >> $GITHUB_ENV
+        fi
+
+        set_510x="${{ github.event.inputs.set_510x }}"
+        if [ "$set_510x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_5_10_Y=${set_510x}" >> $GITHUB_ENV
+        fi
+
+        set_515x="${{ github.event.inputs.set_515x }}"
+        if [ "$set_515x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_5_15_Y=${set_515x}" >> $GITHUB_ENV
+        fi
+
+        set_516x="${{ github.event.inputs.set_516x }}"
+        if [ "$set_516x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_5_16_Y=${set_516x}" >> $GITHUB_ENV
+        fi
+
+        set_ver="${{ github.event.inputs.set_ver }}"
+        echo "OP_DATE=${set_ver}" >> $GITHUB_ENV
+
     - name: MachineType
       run: |
         cat /proc/cpuinfo
@@ -158,7 +190,7 @@ jobs:
     - name: Download Openwrt_Packit
       id: packit
       run: |
-        git clone https://github.com/unifreq/openwrt_packit.git /tmp/packit
+        git clone $F_REPO_URL -b $F_REPO_BRANCH /tmp/packit
         sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
         cd /tmp/packit
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
@@ -177,28 +209,61 @@ jobs:
     - name: Pack OpenWrt
       id: pack
       run: |
-        cd /tmp/packit
-        rm -f make.env
-        cp $GITHUB_WORKSPACE/make_kernel_5.4.y.env make.env -v
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_4_Y
-        mv $KERNEL_5_4_Y/* ./
-        sudo bash mk_s905d_n1-docker.sh
-        rm -f make.env
-        cp $GITHUB_WORKSPACE/make_kernel_5.10.y.env make.env -v
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_10_Y
-        mv $KERNEL_5_10_Y/* ./
-        sudo bash mk_s905d_n1-docker.sh
-        rm -f make.env
-        cp $GITHUB_WORKSPACE/make_kernel_5.15.y.env make.env -v
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_15_Y
-        mv $KERNEL_5_15_Y/* ./
-        sudo bash mk_s905d_n1-docker.sh
-        rm -f make.env
-        cp $GITHUB_WORKSPACE/make_kernel_5.16.y.env make.env -v
-        svn co https://github.com/kissyouhunter/kernel_N1/trunk/kernel/$KERNEL_5_16_Y
-        mv $KERNEL_5_16_Y/* ./
-        sudo bash mk_s905d_n1-docker.sh
+        set_54x="${{ github.event.inputs.set_54x }}"
+        if [ "$set_54x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_5_4_Y
+          mv $KERNEL_5_4_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
 
+        set_510x="${{ github.event.inputs.set_510x }}"
+        if [ "$set_510x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_5_10_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_5_10_Y
+          mv $KERNEL_5_10_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
+
+        set_515x="${{ github.event.inputs.set_515x }}"
+        if [ "$set_515x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_5_15_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_5_15_Y
+          mv $KERNEL_5_15_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
+
+        set_516x="${{ github.event.inputs.set_516x }}"
+        if [ "$set_516x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_5_16_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_5_16_Y
+          mv $KERNEL_5_16_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
     - name: Organize files
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
