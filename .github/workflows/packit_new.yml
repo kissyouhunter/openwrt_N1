@@ -82,6 +82,9 @@ jobs:
           echo "KERNEL_5_16_Y=${set_516x}" >> $GITHUB_ENV
         fi
 
+        set_ver="${{ github.event.inputs.set_ver }}"
+        echo "OP_DATE=${set_ver}" >> $GITHUB_ENV
+
     - name: Checkout
       uses: actions/checkout@v2.3.4
     - name: Host info
@@ -124,7 +127,7 @@ jobs:
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$KERNEL-VER"'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_4_Y
           mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
@@ -138,6 +141,7 @@ jobs:
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_10_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_10_Y
           mv $KERNEL_5_10_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
@@ -151,6 +155,7 @@ jobs:
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_15_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_15_Y
           mv $KERNEL_5_15_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
@@ -164,6 +169,7 @@ jobs:
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_16_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_16_Y
           mv $KERNEL_5_16_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
