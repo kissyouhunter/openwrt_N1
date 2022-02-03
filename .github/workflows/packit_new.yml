@@ -119,7 +119,7 @@ jobs:
           cd /tmp/packit
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|$KERNEL_5_4_Y-kissyouhunter|g' ./make.env
+          sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_4_Y
           mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
