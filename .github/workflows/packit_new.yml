@@ -8,22 +8,6 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-      set_54x:
-        description: "KERNEL: 5.4.x / none"
-        required: false
-        default: "none"
-       set_510x:
-        description: "KERNEL: 5.10.x / none"
-        required: false
-        default: "none"
-      set_515x:
-        description: "KERNEL: 5.15.x / none"
-        required: false
-        default: "none"
-      set_516x:
-        description: "KERNEL: 5.16.x / none"
-        required: false
-        default: "none"                       
 
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
