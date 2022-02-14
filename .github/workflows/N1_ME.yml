@@ -195,7 +195,8 @@ jobs:
         cd /tmp/packit
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
-        mv openwrt-armvirt-64-default-rootfs.tar.gz /tmp/packit/
+        tar -zcvf packages.tar.gz packages/
+        mv openwrt-armvirt-64-default-rootfs.tar.gz /tmp/packit/ -v
         cd /tmp/packit/files
         rm -f luci-admin-status-index-html.patch
         cp $GITHUB_WORKSPACE/luci-admin-status-index-html.patch luci-admin-status-index-html.patch -v       
@@ -219,7 +220,7 @@ jobs:
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_4_Y
-          mv $KERNEL_5_4_Y/* ./
+          mv $KERNEL_5_4_Y/* ./ -v
           sudo bash mk_s905d_n1-docker.sh
         fi
 
@@ -233,7 +234,7 @@ jobs:
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_10_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_10_Y
-          mv $KERNEL_5_10_Y/* ./
+          mv $KERNEL_5_10_Y/* ./ -v
           sudo bash mk_s905d_n1-docker.sh
         fi
 
@@ -247,7 +248,7 @@ jobs:
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_15_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_15_Y
-          mv $KERNEL_5_15_Y/* ./
+          mv $KERNEL_5_15_Y/* ./ -v
           sudo bash mk_s905d_n1-docker.sh
         fi
 
@@ -270,7 +271,8 @@ jobs:
       run: |
         cd /tmp/packit/output
         sudo gzip -9 *
-        sudo mv ../openwrt-armvirt-64-default-rootfs.tar.gz ./
+        sudo mv ../openwrt-armvirt-64-default-rootfs.tar.gz ./ -v
+        mv $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/packages.tar.gz ./ -v
         sudo chmod 777 *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
