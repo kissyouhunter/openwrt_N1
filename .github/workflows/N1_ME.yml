@@ -271,6 +271,7 @@ jobs:
         cd /tmp/packit/output
         sudo gzip -9 *
         sudo mv ../openwrt-armvirt-64-default-rootfs.tar.gz ./ -v
+        tar -zcvf packages.tar.gz $GITHUB_WORKSPACE/openwrt/bin/packages/ && sudo mv packages.tar.gz /tmp/packit/output
         sudo chmod 777 *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
