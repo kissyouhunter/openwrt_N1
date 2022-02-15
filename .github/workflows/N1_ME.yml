@@ -195,7 +195,6 @@ jobs:
         cd /tmp/packit
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
-        tar -zcvf packages.tar.gz packages/
         mv openwrt-armvirt-64-default-rootfs.tar.gz /tmp/packit/ -v
         cd /tmp/packit/files
         rm -f luci-admin-status-index-html.patch
@@ -272,7 +271,6 @@ jobs:
         cd /tmp/packit/output
         sudo gzip -9 *
         sudo mv ../openwrt-armvirt-64-default-rootfs.tar.gz ./ -v
-        sudo mv $GITHUB_WORKSPACE/openwrt/bin/targets/*/*/packages.tar.gz ./ -v
         sudo chmod 777 *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
