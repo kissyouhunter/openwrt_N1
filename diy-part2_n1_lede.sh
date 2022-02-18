@@ -10,6 +10,13 @@
 # Description: OpenWrt DIY script part 2 (After Update feeds)
 #
 
+# echo '删除重复插件'
+rm -rf ./feeds/luci/applications/luci-app-netdata
+rm -rf ./feeds/luci/applications/luci-app-jd-dailybonus
+rm -rf ./feeds/luci/applications/luci-lib-docker
+rm -rf ./feeds/luci/applications/luci-app-cpufreq
+rm -rf ./feeds/luci/applications/luci-app-dockerman
+
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 sed -i 's/192.168.1.1/192.168.2.4/g' package/base-files/files/bin/config_generate
@@ -50,11 +57,11 @@ echo "exit 0" >> package/lean/default-settings/files/zzz-default-settings
 
 #ZeroTier
 
-sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/controller/*.lua
+sed -i 's/vpn/network/g' ./feeds/luci/applications/luci-app-zerotier/luasrc/controller/*.lua
 
-sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/model/cbi/zerotier/*.lua
+sed -i 's/vpn/network/g' ./feeds/luci/applications/luci-app-zerotier/luasrc/model/cbi/zerotier/*.lua
 
-sed -i 's/vpn/network/g' ./package/lean/luci-app-zerotier/luasrc/view/zerotier/*.htm
+sed -i 's/vpn/network/g' ./feeds/luci/applications/luci-app-zerotier/luasrc/view/zerotier/*.htm
 
 #wrtbwmon 实时流量监测
 
