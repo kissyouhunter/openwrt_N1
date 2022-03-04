@@ -13,7 +13,7 @@
 # echo '删除重复插件'
 rm -rf ./feeds/luci/applications/luci-app-netdata
 rm -rf ./feeds/luci/applications/luci-app-jd-dailybonus
-rm -rf ./feeds/luci/applications/luci-lib-docker
+rm -rf ./feeds/luci/collections/luci-lib-docker
 rm -rf ./feeds/luci/applications/luci-app-cpufreq
 rm -rf ./feeds/luci/applications/luci-app-dockerman
 
