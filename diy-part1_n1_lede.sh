@@ -24,3 +24,5 @@ wget -O ./package/lean/autocore/files/arm/index.htm https://raw.githubuserconten
 # 替换banner
 wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/kissyouhunter/openwrt_X86/main/diy/x86_lede/banner
 
+# 替换内核
+sed -i 's/PATCHVER:=5.15/PATCHVER:=5.10/g' ./target/linux/x86/Makefile
