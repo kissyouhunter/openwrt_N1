@@ -1,5 +1,6 @@
 # Amlogic GXL Family
-11:Phicomm N1:s905d:meson-gxl-s905d-phicomm-n1.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:4C@1512Mhz,2GB Mem,1Gb Net,Wifi
+11:Phicomm N1:s905d:meson-gxl-s905d-phicomm-n1.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:4C@1512Mhz,2GB Mem,1Gb Nic,brcm43455 wifi
 12:Phicomm N1 (DMA thresh):s905d:meson-gxl-s905d-phicomm-n1-thresh.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:Same as above, when ethmac flow control is off 
 
-不明白的，请直接选11。
+选择困难症请输入 11
+just type in 11
