@@ -109,10 +109,11 @@ if [ -f "/etc/model_database.txt" ]; then
 else
     model_database="
 # Amlogic GXL Family
-11:Phicomm N1:s905d:meson-gxl-s905d-phicomm-n1.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:4C@1512Mhz,2GB Mem,1Gb Net,Wifi
+11:Phicomm N1:s905d:meson-gxl-s905d-phicomm-n1.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:4C@1512Mhz,2GB Mem,1Gb Nic,brcm43455 wifi
 12:Phicomm N1 (DMA thresh):s905d:meson-gxl-s905d-phicomm-n1-thresh.dtb:u-boot-n1.bin:NA:/lib/u-boot/u-boot-2015-phicomm-n1.bin:Same as above, when ethmac flow control is off 
 
-不明白的，请直接选11。
+选择困难症请输入 11
+just type in 11
 "
 fi
 
@@ -276,7 +277,7 @@ ROOT2=960
 if [[ "${AMLOGIC_SOC}" == "s912" || "${AMLOGIC_SOC}" == "s905d" ]]; then
     BOOT=512
     BLANK1=68
-    BLANK2=184
+    BLANK2=220
     BLANK3=0
     BLANK4=0
 elif [[ "${AMLOGIC_SOC}" == "s905x" ]]; then
@@ -559,7 +560,6 @@ while [ $i -le $max_try ]; do
      "max-size": "10m",
      "max-file": "5"
    },
-  "iptables": true,
   "registry-mirrors": [
      "https://docker.mirrors.ustc.edu.cn",
      "https://registry.cn-shanghai.aliyuncs.com",
@@ -567,6 +567,12 @@ while [ $i -le $max_try ]; do
    ]
 }
 EOF
+        # change data_root value in /etc/config/dockerd
+        if [ -f ./etc/init.d/dockerman ] && [ -f ./etc/config/dockerd ]; then
+            tmp_dockerd=$(mktemp)
+            perl -npe "s/option data_root '.+'/option data_root '\/mnt\/${EMMC_NAME}p4\/docker\/'/" ./etc/config/dockerd >${tmp_dockerd} && mv ${tmp_dockerd} ./etc/config/dockerd
+            unset tmp_dockerd
+        fi
         rm -rf opt/docker && ln -sf /mnt/${EMMC_NAME}p4/docker/ opt/docker >/dev/null
         rm -rf usr/bin/AdGuardHome && ln -sf /mnt/${EMMC_NAME}p4/AdGuardHome usr/bin/ >/dev/null
 
