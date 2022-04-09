@@ -32,7 +32,7 @@ read -p " 请输入 序号 敲回车确认： " CHOOSE
 case $CHOOSE in
 1)
 echo
-bash <(curl -Lso- https://pan.gd772.com/d/update/AutoUpdate.sh)
+bash <(curl -Lso- http://119.29.111.152:5244/d/update/AutoUpdate.sh)
 break
 ;;
 2)
