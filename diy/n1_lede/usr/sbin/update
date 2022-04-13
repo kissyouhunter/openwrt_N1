@@ -37,7 +37,7 @@ break
 ;;
 2)
 echo
-bash <(curl -Lso- hhttps://tt.kisssik.ga/d/aliyun/files/update-N1.sh)
+bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/update-N1.sh)
 break
 ;;
 0)
