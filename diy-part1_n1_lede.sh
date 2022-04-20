@@ -26,3 +26,4 @@ wget -O ./package/base-files/files/etc/banner https://raw.githubusercontent.com/
 
 # 替换内核
 sed -i 's/PATCHVER:=5.15/PATCHVER:=5.4/g' ./target/linux/x86/Makefile
+
