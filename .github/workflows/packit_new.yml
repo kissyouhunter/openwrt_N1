@@ -103,13 +103,6 @@ jobs:
 
     - name: Checkout
       uses: actions/checkout@v2.3.4
-    - name: Host info
-      run: |
-        pwd
-        ls -lah
-        lscpu
-        free -h
-        df -h 
         
     - name: Installing requirements 
       run: |
