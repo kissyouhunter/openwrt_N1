@@ -91,6 +91,6 @@ sed -i 's|opt/kernel|https://github.com/kissyouhunter/kernel_N1/tree/main/kernel
 
 sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/amlogic
 
-#store 商店
+#tencentddns 腾讯ddns
 
-#sed -i 's/"admin", "store"/"admin", "services", "store"/g' ./feeds/kiss/luci-app-store/luasrc/controller/*.lua
+sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
