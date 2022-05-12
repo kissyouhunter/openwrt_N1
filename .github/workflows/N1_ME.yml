@@ -20,6 +20,10 @@ on:
         description: "KERNEL: 5.15.x / none"
         required: false
         default: "none"
+      set_516x:
+        description: "KERNEL: 5.16.x / none"
+        required: false
+        default: "none"
       set_517x:
         description: "KERNEL: 5.17.x / none"
         required: false
