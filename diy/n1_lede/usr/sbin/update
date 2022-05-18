@@ -32,11 +32,39 @@ read -p " 请输入 序号 敲回车确认： " CHOOSE
 case $CHOOSE in
 1)
 echo
+TIME g "正在检查 您的设备 联网状态..."
+TIME g "连接 BAIDU 中..."
+curl --connect-timeout 8 -o /tmp/baidu.html -s -w %{time_namelookup}: http://www.baidu.com > /dev/null 2>&1
+if [[ -f /tmp/baidu.html ]] && [[ `grep -c "百度一下" /tmp/baidu.html` -ge '1' ]]; then
+  rm -rf /tmp/baidu.html
+  echo
+  TIME y "您的设备 连网正常！正在加载 固件升级菜单"
+else
+  echo
+  TIME r "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络"
+  echo "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络" > /tmp/cloud_version
+  exit 1
+fi
+
 bash <(curl -Lso- http://119.29.111.152:10086/d/aliDrive/update/AutoUpdate.sh)
 break
 ;;
 2)
 echo
+TIME g "正在检查 您的设备 联网状态..."
+TIME g "连接 GOOGLE 中..."
+curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: http://www.google.com > /dev/null 2>&1
+if [[ -f /tmp/google.html ]] && [[ `grep -c "google" /tmp/google.html` -ge '1' ]]; then
+  rm -rf /tmp/google.html
+  echo
+  TIME y "您的设备 连网正常！正在加载 固件升级菜单"
+else
+  echo
+  TIME r "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络"
+  echo "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络" > /tmp/cloud_version
+  exit 1
+fi
+
 bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/update-N1.sh)
 break
 ;;
