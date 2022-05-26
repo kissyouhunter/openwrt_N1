@@ -46,7 +46,7 @@ else
   exit 1
 fi
 
-bash <(curl -Lso- http://119.29.111.152:10086/d/aliDrive/update/AutoUpdate.sh)
+bash <(curl -Lso- https://drive.gd772.tk/d/update/AutoUpdate.sh)
 break
 ;;
 2)
