@@ -120,7 +120,7 @@ jobs:
         sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
         cd /tmp/packit
         curl -LO $ROOTFS_URL
-        cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
+        cp $GITHUB_WORKSPACE/mk_s905x3_multi.sh mk_s905x3_multi.sh -v
         cd /tmp/packit/files
         rm -f luci-admin-status-index-html-02.patch
         cp $GITHUB_WORKSPACE/luci-admin-status-index-html-02.patch luci-admin-status-index-html-02.patch -v
@@ -143,7 +143,7 @@ jobs:
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
           svn co $KERNEL_URL/$KERNEL_5_4_Y
           mv $KERNEL_5_4_Y/* ./
-          sudo bash mk_s905d_n1-docker.sh
+          sudo bash mk_s905x3_multi.sh
         fi
 
         set_510x="${{ github.event.inputs.set_510x }}"
