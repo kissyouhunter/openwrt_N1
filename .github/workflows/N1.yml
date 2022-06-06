@@ -40,7 +40,7 @@ env:
   F_REPO_BRANCH: master
   KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
   FEEDS_CONF: lede.feeds.conf.default
-  CONFIG_FILE: n1_lede.config
+  CONFIG_FILE: n1_lede_4and6.config
   DIY_P1_SH: diy-part1_n1_lede.sh
   DIY_P2_SH: diy-part2_n1_lede.sh
   UPLOAD_BIN_DIR: false
