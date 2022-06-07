@@ -94,3 +94,9 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 #tencentddns 腾讯ddns
 
 sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
+
+#暂时修复ssrp
+sed -i 's/luci-lib-ipkg/luci-base/g' ./feeds/helloworld/luci-app-ssr-plus/Makefile
+
+#暂时修复wireguard
+wget -O ./package/kernel/linux/modules/crypto.mk https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/index/index_N1.htm
