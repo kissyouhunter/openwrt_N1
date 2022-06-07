@@ -99,4 +99,4 @@ sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds
 sed -i 's/luci-lib-ipkg/luci-base/g' ./feeds/helloworld/luci-app-ssr-plus/Makefile
 
 #暂时修复wireguard
-wget -O ./package/kernel/linux/modules/crypto.mk https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/index/index_N1.htm
+wget -O ./package/kernel/linux/modules/crypto.mk https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/crypto.mk
