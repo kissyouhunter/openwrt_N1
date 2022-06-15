@@ -20,12 +20,12 @@ on:
         description: "KERNEL: 5.15.x / none"
         required: false
         default: "none"
-      set_516x:
-        description: "KERNEL: 5.16.x / none"
-        required: false
-        default: "none"
       set_517x:
         description: "KERNEL: 5.17.x / none"
+        required: false
+        default: "none"
+      set_518x:
+        description: "KERNEL: 5.18.x / none"
         required: false
         default: "none"
       set_ver:
@@ -58,7 +58,7 @@ jobs:
         rm -rf CPU
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 打包 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_516x }} ${{ github.event.inputs.set_517x }} 固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 打包 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_518x }} ${{ github.event.inputs.set_517x }} 固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
 
     - name: choose kernel
@@ -84,11 +84,11 @@ jobs:
           echo "KERNEL_5_15_Y=${set_515x}" >> $GITHUB_ENV
         fi
 
-        set_516x="${{ github.event.inputs.set_516x }}"
-        if [ "$set_516x" = "none" ]; then
+        set_518x="${{ github.event.inputs.set_518x }}"
+        if [ "$set_518x" = "none" ]; then
           echo "no kernel was chosen"
         else
-          echo "KERNEL_5_16_Y=${set_516x}" >> $GITHUB_ENV
+          echo "KERNEL_5_18_Y=${set_518x}" >> $GITHUB_ENV
         fi
 
         set_517x="${{ github.event.inputs.set_517x }}"
@@ -174,17 +174,17 @@ jobs:
           sudo bash mk_s905d_n1-docker.sh
         fi
 
-        set_516x="${{ github.event.inputs.set_516x }}"
-        if [ "$set_516x" = "none" ]; then
+        set_518x="${{ github.event.inputs.set_518x }}"
+        if [ "$set_518x" = "none" ]; then
           echo "no kernel was chosen"
         else
           cd /tmp/packit
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_5_16_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|op-kissyouhunter|'"$KERNEL_5_18_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_5_16_Y
-          mv $KERNEL_5_16_Y/* ./
+          svn co $KERNEL_URL/$KERNEL_5_18_Y
+          mv $KERNEL_5_18_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
         fi
 
@@ -228,5 +228,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库打包的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_516x }} ${{ github.event.inputs.set_517x }} 固件顺利完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库打包的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_518x }} ${{ github.event.inputs.set_517x }} 固件顺利完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
