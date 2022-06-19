@@ -161,6 +161,7 @@ update_release_file() {
 
 TIME y "开始更新内核。"
 download_n1_kernel
+check_kernel
 update_boot
 update_dtb
 update_modules
