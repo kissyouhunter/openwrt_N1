@@ -97,12 +97,39 @@ update_uboot() {
 #    fi
 #}
 
+# 5.4内核
+update_release_file() {
+    TIME w "开始更新内核显示内容。"
+    sed -i '/KERNEL_VERSION/d' /etc/flippy-openwrt-release
+    echo "KERNEL_VERSION='${kernel_name}'" >>/etc/flippy-openwrt-release
+    sed -i '/K510/d' /etc/flippy-openwrt-release
+    echo "K510='0'" >>/etc/flippy-openwrt-release
+    sed -i "s/ Kernel.*/ Kernel: ${kernel_name}/g" /etc/banner
+    sync
+    TIME g "内核显示内容更新完毕。"
+}
+
+# 5.10以上内核
+#update_release_file() {
+#    TIME w "开始更新内核显示内容。"
+#    sed -i '/KERNEL_VERSION/d' /etc/flippy-openwrt-release
+#    echo "KERNEL_VERSION='${kernel_name}'" >>/etc/flippy-openwrt-release
+#    sed -i '/K510/d' /etc/flippy-openwrt-release
+#    echo "K510='1'" >>/etc/flippy-openwrt-release
+#    sed -i "s/ Kernel.*/ Kernel: ${kernel_name}/g" /etc/banner
+#    sync
+#    TIME g "内核显示内容更新完毕。"
+#}
+
+
+
 TIME y "开始更新内核。"
 download_n1_kernel
 update_boot
 update_dtb
 update_modules
 update_uboot
+update_release_file
 TIME g "内核更新完毕，备重启中。"
 sleep 3
 reboot
