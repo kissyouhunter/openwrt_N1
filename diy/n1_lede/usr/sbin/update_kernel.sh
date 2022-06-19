@@ -40,20 +40,56 @@ download_n1_kernel() {
     TIME g "内核文件下载完毕。"
 }
 
+check_kernel() {
+    cd ${download_path}
+
+    # Determine custom kernel filename
+    kernel_boot="$(ls boot-*.tar.gz | head -n 1)"
+    kernel_name="${kernel_boot/boot-/}" && kernel_name="${kernel_name/.tar.gz/}"
+    KERNEL_VERSION="$(echo ${kernel_name} | grep -oE '^[1-9].[0-9]{1,3}.[0-9]+')"
+
+    # Check the sha256sums file
+    sha256sums_file="sha256sums"
+    sha256sums_check="1"
+    [[ -s "${sha256sums_file}" && -n "$(cat ${sha256sums_file})" ]] || sha256sums_check="0"
+    [[ -n "$(which sha256sum)" ]] || sha256sums_check="0"
+    [[ "${sha256sums_check}" -eq "1" ]]
+
+    # Loop check file
+    i="1"
+    kernel_list=("boot" "dtb-amlogic" "modules")
+    for kernel_file in ${kernel_list[*]}; do
+        # Set check filename
+        tmp_file="${kernel_file}-${kernel_name}.tar.gz"
+        # Check if file exists
+        [[ -s "${tmp_file}" ]] || TIME r "文件[ ${kernel_file} ]不完整。"
+        # Check if the file sha256sum is correct
+        if [[ "${sha256sums_check}" -eq "1" ]]; then
+            tmp_sha256sum="$(sha256sum "${tmp_file}" | awk '{print $1}')"
+            tmp_checkcode="$(cat ${sha256sums_file} | grep ${tmp_file} | awk '{print $1}')"
+            [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || TIME r "${tmp_file}: sha256sum 不 OJBK"
+            TIME r "(${i}/3) [ ${tmp_file} ] 文件 sha256sum OJBK."
+        fi
+        let i++
+    done
+
+    sync && echo ""
+}
+
 update_boot() {
     TIME w "开始更新boot。"
     rm -f /boot/config-* /boot/initrd.img-* /boot/System.map-* /boot/uInitrd-* /boot/vmlinuz-* && sync
     rm -f /boot/uInitrd /boot/zImage && sync
     tar -xf ${download_path}/${boot_file} -C /boot && sync
     cd /boot && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage && sync
-    TIME g "boot更新成功。"
+    TIME g "boot OJBK。"
 }
 
 update_dtb() {
     TIME w "开始更新dtb。"
     cd /boot/dtb/amlogic/ && rm -f * && sync
     tar -xf ${download_path}/${dtb_file} -C /boot/dtb/amlogic/ && sync
-    TIME w "dtb更新成功。"
+    TIME w "dtb OJBK。"
 }
 
 update_modules() {
@@ -69,7 +105,7 @@ update_modules() {
         TIME r "*.ko 文件错误。"
         exit 0
     fi
-    TIME g "modules更新成功。"
+    TIME g "modules OJBK。"
 }
 
 # 5.4内核
@@ -77,9 +113,9 @@ update_uboot() {
     TIME w "开始更新uboot。"
     rm -f /boot/u-boot.ext
     if [ -f "/boot/u-boot.ext" ]; then
-        TIME r "uboot更新失败。"
+        TIME r "uboot 不OJBK。"
     else
-        TIME g "uboot更新成功。"
+        TIME g "uboot OJBK。"
     fi
 }
 
@@ -91,9 +127,9 @@ update_uboot() {
 #    rm -f /boot/u-boot.ext
 #    cp -f ${download_path}/u-boot.ext /boot/u-boot.ext && sync
 #    if [ -f "/boot/u-boot.ext" ]; then
-#        TIME r "uboot更新成功。"
+#        TIME r "uboot OJBK。"
 #    else
-#        TIME g "uboot更新失败。"
+#        TIME g "uboot 不OJBK。"
 #    fi
 #}
 
