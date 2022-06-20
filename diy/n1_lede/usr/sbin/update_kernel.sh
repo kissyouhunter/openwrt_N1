@@ -68,7 +68,7 @@ check_kernel() {
         if [[ "${sha256sums_check}" -eq "1" ]]; then
             tmp_sha256sum="$(sha256sum "${tmp_file}" | awk '{print $1}')"
             tmp_checkcode="$(cat ${sha256sums_file} | grep ${tmp_file} | awk '{print $1}')"
-            [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || TIME r "${tmp_file}: sha256sum 不 OJBK" || exit 1
+            [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || TIME r "${tmp_file}: sha256sum 不 OJBK"
             TIME r "(${i}/3) [ ${tmp_file} ] 文件 sha256sum OJBK."
         fi
         let i++
@@ -83,14 +83,24 @@ update_boot() {
     rm -f /boot/uInitrd /boot/zImage && sync
     tar -xf ${download_path}/${boot_file} -C /boot && sync
     cd /boot && cp -f uInitrd-${kernel_name} uInitrd && cp -f vmlinuz-${kernel_name} zImage && sync
-    TIME g "boot OJBK。"
+    if [ -f "/boot/config-${kernel_name}" ] && [ -f "/boot/System.map-${kernel_name}" ] && [ -f "/boot/uInitrd-${kernel_name}" ] && [ -f "/boot/vmlinuz-${kernel_name}" ] && [ -f "/boot/uInitrd" ] && [ -f "/boot/zImage" ]; then
+        TIME g "boot OJBK。"
+    else
+        TIME r "boot 不OJBK。"
+        exit 1
+    fi
 }
 
 update_dtb() {
     TIME w "开始更新dtb。"
     cd /boot/dtb/amlogic/ && rm -f * && sync
     tar -xf ${download_path}/${dtb_file} -C /boot/dtb/amlogic/ && sync
-    TIME g "dtb OJBK。"
+    if [ -f "/boot/dtb/amlogic/meson-gxl-s905d-phicomm-n1.dtb" ]; then
+        TIME g "dtb OJBK。"
+    else
+        TIME r "dtb 不OJBK。"
+        exit 1
+    fi
 }
 
 update_modules() {
