@@ -32,15 +32,16 @@ dtb_file=dtb-amlogic-5.4.198-kissyouhunter.tar.gz
 download_n1_kernel() {
     TIME w "开始下载内核文件。"
     mkdir -p ${download_path}
-    cd ${download_path}
-    curl -LO ${url}/${kernel_number}/${boot_file}
-    curl -LO ${url}/${kernel_number}/${modules_file}
-    curl -LO ${url}/${kernel_number}/${dtb_file}
+    #cd ${download_path}
+    curl -Lo ${download_path}/${boot_file} ${url}/${kernel_number}/${boot_file}
+    curl -Lo ${download_path}/${modules_file} ${url}/${kernel_number}/${modules_file}
+    curl -Lo ${download_path}/${dtb_file} ${url}/${kernel_number}/${dtb_file}
     sync
     TIME g "内核文件下载完毕。"
 }
 
 check_kernel() {
+    TIME w "开始检查文件。"
     cd ${download_path}
 
     # Determine custom kernel filename
@@ -67,7 +68,7 @@ check_kernel() {
         if [[ "${sha256sums_check}" -eq "1" ]]; then
             tmp_sha256sum="$(sha256sum "${tmp_file}" | awk '{print $1}')"
             tmp_checkcode="$(cat ${sha256sums_file} | grep ${tmp_file} | awk '{print $1}')"
-            [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || TIME r "${tmp_file}: sha256sum 不 OJBK"
+            [[ "${tmp_sha256sum}" == "${tmp_checkcode}" ]] || TIME r "${tmp_file}: sha256sum 不 OJBK" || exit 1
             TIME r "(${i}/3) [ ${tmp_file} ] 文件 sha256sum OJBK."
         fi
         let i++
@@ -103,7 +104,7 @@ update_modules() {
     x=$(ls *.ko -l | grep "^l" | wc -l)
     if [ "${x}" -eq "0" ]; then
         TIME r "*.ko 文件错误。"
-        exit 0
+        exit 1
     fi
     TIME g "modules OJBK。"
 }
@@ -114,6 +115,7 @@ update_uboot() {
     rm -f /boot/u-boot.ext
     if [ -f "/boot/u-boot.ext" ]; then
         TIME r "uboot 不OJBK。"
+        exit 1
     else
         TIME g "uboot OJBK。"
     fi
@@ -130,6 +132,7 @@ update_uboot() {
 #        TIME g "uboot OJBK。"
 #    else
 #        TIME r "uboot 不OJBK。"
+#        exit 1
 #    fi
 #}
 
