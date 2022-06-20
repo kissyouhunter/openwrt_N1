@@ -18,38 +18,6 @@ TIME() {
       }
 }
 
-while :; do
-echo
-TIME g "---- N1固件 在线更新菜单 ----"
-echo
-TIME g "[1] 更新 gd772 编译的 N1固件"
-echo
-TIME g "[2] 更新  kiss 编译的 N1固件"
-echo
-TIME g "[0] 继续做 钉子户 退出更新!"
-TIME g "-------------------------------"
-read -p " 请输入 序号 敲回车确认： " CHOOSE
-case $CHOOSE in
-1)
-echo
-TIME g "正在检查 您的设备 联网状态..."
-TIME g "连接 BAIDU 中..."
-curl --connect-timeout 8 -o /tmp/baidu.html -s -w %{time_namelookup}: http://www.baidu.com > /dev/null 2>&1
-if [[ -f /tmp/baidu.html ]] && [[ $(grep -c "百度一下" /tmp/baidu.html) -ge '1' ]]; then
-  rm -rf /tmp/baidu.html
-  echo
-  TIME y "您的设备 连网正常！正在加载 固件升级菜单"
-else
-  echo
-  TIME r "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络"
-  echo "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络" > /tmp/cloud_version
-  exit 1
-fi
-
-bash <(curl -Lso- https://drive.gd772.tk/d/update/AutoUpdate.sh)
-break
-;;
-2)
 echo
 TIME g "正在检查 您的设备 联网状态..."
 TIME g "连接 GOOGLE 中..."
@@ -65,9 +33,74 @@ else
   exit 1
 fi
 
-bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/update-N1.sh)
-break
-;;
+while :; do
+echo
+TIME g "---- N1固件 在线更新菜单 ----"
+echo
+TIME g "[1] 更新 N1固件"
+echo
+TIME g "[2] 更新 N1内核"
+echo
+TIME g "[0] 继续做 钉子户 退出更新!"
+TIME g "-------------------------------"
+read -p " 请输入 序号 敲回车确认： " CHOOSE
+case $CHOOSE in
+1)
+  while :; do
+  echo
+  TIME g "---- N1固件 在线更新菜单 ----"
+  echo
+  TIME g "[1] 更新 gd772 编译的 N1固件"
+  echo
+  TIME g "[2] 更新 kiss  编译的 N1固件"
+  echo
+  TIME g "[0] 返回上级菜单!"
+  TIME g "-------------------------------"
+  read -p " 请输入 序号 敲回车确认： " CHOOSE11
+  case $CHOOSE11 in
+  1)
+    bash <(curl -Lso- https://drive.gd772.tk/d/update/AutoUpdate.sh)
+    break
+    ;;
+  2)
+    bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/update-N1.sh)
+    break
+    ;;
+  0)
+    clear
+    break
+    ;;
+  esac
+  done
+  ;;
+2)
+  while :; do
+  echo
+  TIME g "---- N1固件 在线更新菜单 ----"
+  echo
+  TIME g "[1] 更新 gd772 编译的 N1内核"
+  echo
+  TIME g "[2] 更新 kiss  编译的 N1内核"
+  echo
+  TIME g "[0] 返回上级菜单!"
+  TIME g "-------------------------------"
+  read -p " 请输入 序号 敲回车确认： " CHOOSE11
+  case $CHOOSE11 in
+  1)
+    bash <(curl -Lso- https://drive.gd772.tk/d/update/kernel-N1.sh)
+    break
+    ;;
+  2)
+    bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/kernel-N1.sh)
+    break
+    ;;
+  0)
+    clear
+    break
+    ;;
+  esac
+  done
+  ;;
 0)
 echo
 TIME g "[0] 继续做 钉子户 退出本次更新"
