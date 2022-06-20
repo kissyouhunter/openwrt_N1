@@ -72,7 +72,7 @@ check_kernel() {
         fi
         let i++
     done
-
+    TIME g "下载的文件都OJBK"
     sync && echo ""
 }
 
@@ -89,7 +89,7 @@ update_dtb() {
     TIME w "开始更新dtb。"
     cd /boot/dtb/amlogic/ && rm -f * && sync
     tar -xf ${download_path}/${dtb_file} -C /boot/dtb/amlogic/ && sync
-    TIME w "dtb OJBK。"
+    TIME g "dtb OJBK。"
 }
 
 update_modules() {
@@ -127,9 +127,9 @@ update_uboot() {
 #    rm -f /boot/u-boot.ext
 #    cp -f ${download_path}/u-boot.ext /boot/u-boot.ext && sync
 #    if [ -f "/boot/u-boot.ext" ]; then
-#        TIME r "uboot OJBK。"
+#        TIME g "uboot OJBK。"
 #    else
-#        TIME g "uboot 不OJBK。"
+#        TIME r "uboot 不OJBK。"
 #    fi
 #}
 
