@@ -170,8 +170,6 @@ update_release_file() {
 #    TIME g "内核显示内容更新完毕。"
 #}
 
-
-
 TIME y "开始更新内核。"
 download_n1_kernel
 check_kernel
