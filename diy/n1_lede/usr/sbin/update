@@ -46,6 +46,7 @@ TIME g "-------------------------------"
 read -p " 请输入 序号 敲回车确认： " CHOOSE
 case $CHOOSE in
 1)
+  clear
   while :; do
   echo
   TIME g "---- N1固件 在线更新菜单 ----"
@@ -56,8 +57,8 @@ case $CHOOSE in
   echo
   TIME g "[0] 返回上级菜单!"
   TIME g "-------------------------------"
-  read -p " 请输入 序号 敲回车确认： " CHOOSE11
-  case $CHOOSE11 in
+  read -p " 请输入 序号 敲回车确认： " CHOOSE1
+  case $CHOOSE1 in
   1)
     bash <(curl -Lso- https://drive.gd772.tk/d/update/AutoUpdate.sh)
     break
@@ -70,10 +71,15 @@ case $CHOOSE in
     clear
     break
     ;;
+  *)
+  echo
+  TIME r "请输入正确的序号!"
+  ;;
   esac
   done
   ;;
 2)
+  clear
   while :; do
   echo
   TIME g "---- N1固件 在线更新菜单 ----"
@@ -84,8 +90,8 @@ case $CHOOSE in
   echo
   TIME g "[0] 返回上级菜单!"
   TIME g "-------------------------------"
-  read -p " 请输入 序号 敲回车确认： " CHOOSE11
-  case $CHOOSE11 in
+  read -p " 请输入 序号 敲回车确认： " CHOOSE2
+  case $CHOOSE2 in
   1)
     bash <(curl -Lso- https://drive.gd772.tk/d/update/kernel-N1.sh)
     break
@@ -98,6 +104,10 @@ case $CHOOSE in
     clear
     break
     ;;
+  *)
+  echo
+  TIME r "请输入正确的序号!"
+  ;;
   esac
   done
   ;;

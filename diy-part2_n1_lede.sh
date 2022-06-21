@@ -96,7 +96,7 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
 
 #暂时修复ssrp
-wget -O ./feeds/helloworld/luci-app-ssr-plus/Makefile  https://raw.githubusercontent.com/fw876/helloworld/b4ede27bc2665208b7c5b2901abab55ea780d7b3/luci-app-ssr-plus/Makefile
+#wget -O ./feeds/helloworld/luci-app-ssr-plus/Makefile  https://raw.githubusercontent.com/fw876/helloworld/b4ede27bc2665208b7c5b2901abab55ea780d7b3/luci-app-ssr-plus/Makefile
 
 #暂时修复wireguard
-wget -O ./package/kernel/linux/modules/crypto.mk https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/crypto.mk
+#wget -O ./package/kernel/linux/modules/crypto.mk https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/crypto.mk
