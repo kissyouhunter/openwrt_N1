@@ -60,11 +60,11 @@ case $CHOOSE in
   read -p " 请输入 序号 敲回车确认： " CHOOSE1
   case $CHOOSE1 in
   1)
-    bash <(curl -Lso- https://drive.gd772.tk/d/update/AutoUpdate.sh)
+    bash <(curl -Lso- https://drive.smayun.xyz/d/update/AutoUpdate.sh)
     break
     ;;
   2)
-    bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/update-N1.sh)
+    bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
     break
     ;;
   0)
@@ -93,11 +93,11 @@ case $CHOOSE in
   read -p " 请输入 序号 敲回车确认： " CHOOSE2
   case $CHOOSE2 in
   1)
-    bash <(curl -Lso- https://drive.gd772.tk/d/update/kernel-N1.sh)
+    bash <(curl -Lso- https://drive.smayun.xyz//d/update/kernel-N1.sh)
     break
     ;;
   2)
-    bash <(curl -Lso- https://tt.kisssik.ga/d/aliyun/files/kernel-N1.sh)
+    bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/kernel-N1.sh)
     break
     ;;
   0)
