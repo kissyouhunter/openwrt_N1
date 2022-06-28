@@ -18,102 +18,59 @@ TIME() {
       }
 }
 
+while :; do
 echo
-TIME g "正在检查 您的设备 联网状态..."
-TIME g "连接 GOOGLE 中..."
+TIME g "--- N1固件 在线更新菜单 ----"
+echo
+TIME g "[1] 更新 gd772 编译的 N1固件"
+echo
+TIME g "[2] 更新  kiss 编译的 N1固件"
+echo
+TIME r "[0] 继续做 钉子户 退出更新!"
+TIME g "----------------------------"
+read -p " 请输入 序号 敲回车确认： " CHOOSE
+case $CHOOSE in
+1)
+echo
+TIME g "检查 设备网络状态中..."
+curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: https://www.google.com > /dev/null 2>&1
+if [[ -f /tmp/google.html ]] && [[ $(grep -c "Google" /tmp/google.html) -ge '1' ]]; then
+  rm -rf /tmp/google.html
+  echo
+  TIME y "设备网络状态正常！正在加载 更新菜单"
+else
+  echo
+  TIME "您的设备 科学上网状态异常！无法加载 固件升级菜单 请自行检查 网设环境设置"
+  echo "您的设备 科学上网状态异常！无法加载 固件升级菜单 请自行检查 网设环境设置" > /tmp/cloud_version
+  echo
+  exit 1
+fi
+
+bash <(curl -Lso- https://drive.smayun.xyz/d/update/AutoUpdate.sh)  
+  
+break
+;;
+2)
+echo
+TIME g "正在检查 科学上网状态..."
 curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: http://www.google.com > /dev/null 2>&1
 if [[ -f /tmp/google.html ]] && [[ $(grep -c "google" /tmp/google.html) -ge '1' ]]; then
   rm -rf /tmp/google.html
   echo
-  TIME y "您的设备 连网正常！正在加载 固件升级菜单"
+  TIME y "设备网络状态正常！正在加载 更新菜单"
 else
   echo
-  TIME r "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络"
-  echo "您的设备 没联网！ 无法加载固件升级菜单 请自行检查网络" > /tmp/cloud_version
+  TIME "您的设备 不能科学上网！ 无法加载固件升级菜单 请自行检查设备网络环境 是否能科学上网"
+  echo "您的设备 不能科学上网！ 无法加载固件升级菜单 请自行检查设备网络环境 是否能科学上网" > /tmp/cloud_version
+  echo
   exit 1
 fi
-
-while :; do
-echo
-TIME g "---- N1固件 在线更新菜单 ----"
-echo
-TIME g "[1] 更新 N1固件"
-echo
-TIME g "[2] 更新 N1内核"
-echo
-TIME g "[0] 继续做 钉子户 退出更新!"
-TIME g "-------------------------------"
-read -p " 请输入 序号 敲回车确认： " CHOOSE
-case $CHOOSE in
-1)
-  clear
-  while :; do
-  echo
-  TIME g "---- N1固件 在线更新菜单 ----"
-  echo
-  TIME g "[1] 更新 gd772 编译的 N1固件"
-  echo
-  TIME g "[2] 更新 kiss  编译的 N1固件"
-  echo
-  TIME g "[0] 返回上级菜单!"
-  TIME g "-------------------------------"
-  read -p " 请输入 序号 敲回车确认： " CHOOSE1
-  case $CHOOSE1 in
-  1)
-    bash <(curl -Lso- https://drive.smayun.xyz/d/update/AutoUpdate.sh)
-    break
-    ;;
-  2)
-    bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
-    break
-    ;;
-  0)
-    clear
-    break
-    ;;
-  *)
-  echo
-  TIME r "请输入正确的序号!"
-  ;;
-  esac
-  done
-  ;;
-2)
-  clear
-  while :; do
-  echo
-  TIME g "---- N1固件 在线更新菜单 ----"
-  echo
-  TIME g "[1] 更新 gd772 编译的 N1内核"
-  echo
-  TIME g "[2] 更新 kiss  编译的 N1内核"
-  echo
-  TIME g "[0] 返回上级菜单!"
-  TIME g "-------------------------------"
-  read -p " 请输入 序号 敲回车确认： " CHOOSE2
-  case $CHOOSE2 in
-  1)
-    bash <(curl -Lso- https://drive.smayun.xyz//d/update/kernel-N1.sh)
-    break
-    ;;
-  2)
-    bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/kernel-N1.sh)
-    break
-    ;;
-  0)
-    clear
-    break
-    ;;
-  *)
-  echo
-  TIME r "请输入正确的序号!"
-  ;;
-  esac
-  done
-  ;;
+bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
+break
+;;
 0)
 echo
-TIME g "[0] 继续做 钉子户 退出本次更新"
+TIME r "[0] 继续做 钉子户 退出本次更新"
 echo
 exit 0
 break
