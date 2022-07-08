@@ -100,3 +100,7 @@ sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds
 
 #暂时修复wireguard
 #wget -O ./package/kernel/linux/modules/crypto.mk https://raw.githubusercontent.com/kissyouhunter/openwrt_N1/main/diy/n1_lede/crypto.mk
+
+# python-cryptography 暂时修复
+rm -rf feeds/packages/lang/python/python-cryptography
+svn co https://github.com/openwrt/packages/trunk/lang/python/python-cryptography feeds/packages/lang/python/python-cryptography
