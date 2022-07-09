@@ -104,3 +104,4 @@ sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds
 # python-cryptography 暂时修复
 rm -rf feeds/packages/lang/python/python-cryptography
 svn co https://github.com/openwrt/packages/trunk/lang/python/python-cryptography feeds/packages/lang/python/python-cryptography
+
