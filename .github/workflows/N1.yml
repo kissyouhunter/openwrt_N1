@@ -8,10 +8,6 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-      set_419x:
-        description: "KERNEL: 4.19.x / none"
-        required: false
-        default: "none"
       set_54x:
         description: "KERNEL: 5.4.x / none"
         required: false
@@ -22,10 +18,6 @@ on:
         default: "none"
       set_515x:
         description: "KERNEL: 5.15.x / none"
-        required: false
-        default: "none"
-      set_517x:
-        description: "KERNEL: 5.17.x / none"
         required: false
         default: "none"
       set_518x:
@@ -86,13 +78,6 @@ jobs:
           echo "no kernel was chosen"
         else
           echo "KERNEL_5_18_Y=${set_518x}" >> $GITHUB_ENV
-        fi
-
-        set_419x="${{ github.event.inputs.set_419x }}"
-        if [ "$set_419x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_4_19_Y=${set_419x}" >> $GITHUB_ENV
         fi
 
         set_ver="${{ github.event.inputs.set_ver }}"
@@ -275,21 +260,7 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_18_Y
           mv $KERNEL_5_18_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-        fi
-
-        set_419x="${{ github.event.inputs.set_419x }}"
-        if [ "$set_419x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          cd /tmp/packit
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_4_19_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_4_19_Y
-          mv $KERNEL_4_19_Y/* ./
-          sudo bash mk_s905d_n1-docker.sh
-        fi   
+        fi 
         
     - name: Organize files
       id: organize
