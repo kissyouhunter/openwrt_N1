@@ -22,15 +22,15 @@ while :; do
 echo
 TIME g "--- N1固件 在线更新菜单 ----"
 echo
-TIME g "[1] 更新 gd772 编译的 N1固件"
+TIME g "[1] 更新  kiss 编译的 N1固件"
 echo
-TIME g "[2] 更新  kiss 编译的 N1固件"
+TIME g "[2] 更新 gd772 编译的 N1固件"
 echo
 TIME r "[0] 继续做 钉子户 退出更新!"
 TIME g "----------------------------"
 read -p " 请输入 序号 敲回车确认： " CHOOSE
 case $CHOOSE in
-1)
+2)
 echo
 TIME g "检查 设备网络状态中..."
 curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: https://www.google.com > /dev/null 2>&1
@@ -50,7 +50,7 @@ bash <(curl -Lso- https://drive.smayun.xyz/d/update/AutoUpdate.sh)
   
 break
 ;;
-2)
+1)
 echo
 TIME g "正在检查 科学上网状态..."
 curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: http://www.google.com > /dev/null 2>&1
@@ -65,7 +65,7 @@ else
   echo
   exit 1
 fi
-bash <(curl -Lso- https://drive.kissyouhunter.com/d/aliyun/files/update-N1.sh)
+bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
 break
 ;;
 0)
