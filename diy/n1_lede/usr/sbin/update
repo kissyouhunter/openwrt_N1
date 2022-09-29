@@ -46,7 +46,7 @@ else
   exit 1
 fi
 
-bash <(curl -Lso- https://drive.smayun.xyz/d/update/AutoUpdate.sh)  
+bash <(curl -Lso- http://drive.gd772.net/d/update/AutoUpdate.sh)  
   
 break
 ;;
@@ -65,7 +65,7 @@ else
   echo
   exit 1
 fi
-bash <(curl -Lso- https://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
+bash <(curl -Lso- http://drive.kiss6.top/d/aliyun/files/update-N1.sh)
 break
 ;;
 0)
