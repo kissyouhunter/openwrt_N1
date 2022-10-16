@@ -96,4 +96,4 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
 
 #暂时修复qtbase
-wget -O ./feeds/packages/libs/qtbase/Makefile https://raw.githubusercontent.com/1054009064/packages/master/libs/qtbase/Makefile
+#wget -O ./feeds/packages/libs/qtbase/Makefile https://raw.githubusercontent.com/1054009064/packages/master/libs/qtbase/Makefile

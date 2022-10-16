@@ -24,10 +24,14 @@ on:
         description: "KERNEL: 5.19.x / none"
         required: false
         default: "none"
-      set_ver:
-        description: "VER: 22.8.2 / ..."
+      set_60x:
+        description: "KERNEL: 6.0.x / none"
         required: false
-        default: "22.8.2"
+        default: "none"
+      set_ver:
+        description: "VER: 22.10.10 / ..."
+        required: false
+        default: "22.10.10"
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -78,6 +82,13 @@ jobs:
           echo "no kernel was chosen"
         else
           echo "KERNEL_5_19_Y=${set_519x}" >> $GITHUB_ENV
+        fi
+
+        set_60x="${{ github.event.inputs.set_60x }}"
+        if [ "$set_60x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_6_0_Y=${set_60x}" >> $GITHUB_ENV
         fi
 
         set_ver="${{ github.event.inputs.set_ver }}"
@@ -262,7 +273,21 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_19_Y
           mv $KERNEL_5_19_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-        fi 
+        fi
+
+        set_60x="${{ github.event.inputs.set_60x }}"
+        if [ "$set_60x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_6_0_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_6_0_Y
+          mv $KERNEL_6_0_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi
         
     - name: Organize files
       id: organize
