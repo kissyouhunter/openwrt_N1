@@ -65,7 +65,7 @@ else
   echo
   exit 1
 fi
-bash <(curl -Lso- http://drive.kiss6.top/d/aliyun/files/update-N1.sh)
+bash <(curl -Lso- http://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
 break
 ;;
 0)
