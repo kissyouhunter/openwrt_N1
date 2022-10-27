@@ -1,5 +1,5 @@
 ### 斐讯 N1 OpenWrt 固件编译脚本
-* 下载跳转[github](https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1/releases/tag/openwrt_n1) [网盘](https://drive.kissyouhunter.com)
+* 下载跳转[github](https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1/releases/tag/openwrt_n1) [网盘](https://cloud.kisslove.eu.org)
 ------------------------------------------------------------------
 ##### workflows 里主要有三个自动脚本，分别为：
 ##### 编译 roofts 并利用F大脚本打包 （N1.yml）； 单编译 roofts （n1_roofts.yml）； 利用编译好的 roofts 再用F大脚本打包 （packit_new.yml）
