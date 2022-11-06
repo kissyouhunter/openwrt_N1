@@ -52,10 +52,8 @@ break
 ;;
 1)
 echo
-TIME g "检查p4分区剩余空间..."
 volume=$(df -m | grep /dev/mmcblk2p4 | grep -v docker | awk '{print $4}')
 if [ $volume -ge 1024 ]; then
-  TIME y "p4分区空间足够，继续运行脚本"
   echo
 else
   TIME r "p4分区为${volume}m，小于1G。删除垃圾文件后再运行更新命令"
