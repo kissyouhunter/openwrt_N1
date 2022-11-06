@@ -18,6 +18,14 @@ TIME() {
       }
 }
 
+volume=$(df -m | grep /dev/mmcblk2p4 | grep -v docker | awk '{print $4}')
+if [ $volume -ge 1024 ]; then
+  echo
+else
+  TIME r "p4分区为${volume}m，小于1G。删除垃圾文件后再运行更新命令"
+  exit 0
+fi
+
 while :; do
 echo
 TIME g "--- N1固件 在线更新菜单 ----"
@@ -52,13 +60,6 @@ break
 ;;
 1)
 echo
-volume=$(df -m | grep /dev/mmcblk2p4 | grep -v docker | awk '{print $4}')
-if [ $volume -ge 1024 ]; then
-  echo
-else
-  TIME r "p4分区为${volume}m，小于1G。删除垃圾文件后再运行更新命令"
-  exit 0
-fi
 TIME g "正在检查 科学上网状态..."
 curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: http://www.google.com > /dev/null 2>&1
 if [[ -f /tmp/google.html ]] && [[ $(grep -c "google" /tmp/google.html) -ge '1' ]]; then
