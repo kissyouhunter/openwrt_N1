@@ -96,5 +96,5 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
 
 #暂时修复python3
-#sed -i 's/PKG_VERSION:=./PKG_VERSION:=4.8/g' tools/sed/Makefile
-#sed -i 's/PKG_HASH:=./PKG_HASH:=f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633/g' tools/sed/Makefile
+sed -i 's/PKG_VERSION:=*.*/PKG_VERSION:=4.8/g' tools/sed/Makefile
+sed -i 's/PKG_HASH:=*.*/PKG_HASH:=f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633/g' tools/sed/Makefile
