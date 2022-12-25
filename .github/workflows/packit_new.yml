@@ -215,7 +215,7 @@ jobs:
         sudo gzip -9 *
         sudo chmod 777 *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "statu=success" >> $GITHUB_OUTPUT
+        echo "status=success" >> $GITHUB_OUTPUT
 
     - name: Upload firmware directory
       uses: kittaakos/upload-artifact-as-is@master
