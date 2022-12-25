@@ -20,18 +20,18 @@ on:
         description: "KERNEL: 5.15.x / none"
         required: false
         default: "none"
-      set_519x:
-        description: "KERNEL: 5.19.x / none"
-        required: false
-        default: "none"
       set_60x:
         description: "KERNEL: 6.0.x / none"
         required: false
         default: "none"
-      set_ver:
-        description: "VER: 22.11.11 / ..."
+      set_61x:
+        description: "KERNEL: 6.1.x / none"
         required: false
-        default: "22.11.11"
+        default: "none"
+      set_ver:
+        description: "VER: 22.12.1 / ..."
+        required: false
+        default: "22.12.1"
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -77,18 +77,18 @@ jobs:
           echo "KERNEL_5_15_Y=${set_515x}" >> $GITHUB_ENV
         fi
 
-        set_519x="${{ github.event.inputs.set_519x }}"
-        if [ "$set_519x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_5_19_Y=${set_519x}" >> $GITHUB_ENV
-        fi
-
         set_60x="${{ github.event.inputs.set_60x }}"
         if [ "$set_60x" = "none" ]; then
           echo "no kernel was chosen"
         else
           echo "KERNEL_6_0_Y=${set_60x}" >> $GITHUB_ENV
+        fi
+
+        set_61x="${{ github.event.inputs.set_61x }}"
+        if [ "$set_61x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_6_1_Y=${set_61x}" >> $GITHUB_ENV
         fi
 
         set_ver="${{ github.event.inputs.set_ver }}"
@@ -103,11 +103,11 @@ jobs:
         rm -rf CPU
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库的 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 编译 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_60x }} 固件并打包,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库的 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 编译 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_60x }} ${{ github.event.inputs.set_61x }} 固件并打包,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
 
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@v3
 
     - name: Initialization environment
       env:
@@ -131,12 +131,12 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         
-    - name: load cache
-      if: env.USE_CACHEWRTBUILD == 'true'
-      uses: klever1988/cachewrtbuild@test
-      with:
-        ccache: 'true'
-        prefix: ${{ github.workspace }}/openwrt
+    #- name: load cache
+    #  if: env.USE_CACHEWRTBUILD == 'true'
+    #  uses: klever1988/cachewrtbuild@test
+    #  with:
+    #    ccache: 'true'
+    #    prefix: ${{ github.workspace }}/openwrt
 
     - name: Load custom feeds
       run: |
@@ -222,6 +222,7 @@ jobs:
         set_54x="${{ github.event.inputs.set_54x }}"
         if [ "$set_54x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_54=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -231,11 +232,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_4_Y
           mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_510x="${{ github.event.inputs.set_510x }}"
         if [ "$set_510x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_510=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -245,11 +248,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_10_Y
           mv $KERNEL_5_10_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_510=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_10_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_515x="${{ github.event.inputs.set_515x }}"
         if [ "$set_515x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_515=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -259,25 +264,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_15_Y
           mv $KERNEL_5_15_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-        fi
-
-        set_519x="${{ github.event.inputs.set_519x }}"
-        if [ "$set_519x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          cd /tmp/packit
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_5_19_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_5_19_Y
-          mv $KERNEL_5_19_Y/* ./
-          sudo bash mk_s905d_n1-docker.sh
+          echo "OP_515=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_15_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_60x="${{ github.event.inputs.set_60x }}"
         if [ "$set_60x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_60=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -287,6 +280,23 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_6_0_Y
           mv $KERNEL_6_0_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_60=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_0_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
+        fi
+
+        set_61x="${{ github.event.inputs.set_61x }}"
+        if [ "$set_61x" = "none" ]; then
+          echo "no kernel was chosen"
+          echo "OP_61=none" >> $GITHUB_ENV
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_6_1_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_6_1_Y
+          mv $KERNEL_6_1_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+          echo "OP_61=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_1_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
         
     - name: Organize files
@@ -298,13 +308,53 @@ jobs:
         sudo mv ../openwrt-armvirt-64-default-rootfs.tar.gz ./
         sudo chmod 777 *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "::set-output name=status::success"
+        echo "status=success" >> $GITHUB_OUTPUT
 
-    - name: Upload firmware directory
-      uses: kittaakos/upload-artifact-as-is@master
+    - name: Upload firmware roofts
+      uses: actions/upload-artifact@master
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        path: ${{ env.FIRMWARE }}
+        path: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
+
+    - name: Upload firmware Kernel_5_4_Y
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_54 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_54 }}
+
+    - name: Upload firmware Kernel_5_10_Y
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_510 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_510 }}
+
+    - name: Upload firmware Kernel_5_15_Y
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_515 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_515 }}
+
+    - name: Upload firmware Kernel_6_0_Y
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_60 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_60 }}
+
+    - name: Upload firmware Kernel_6_1_Y
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_61 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_61 }}
 
     #- name: Delete workflow runs
       #uses: GitRML/delete-workflow-runs@main
@@ -316,5 +366,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库编译的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_60x }}  固件顺利编译完成了,并且打包完毕！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库编译的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_60x }} ${{ github.event.inputs.set_61x }} 固件顺利编译完成了,并且打包完毕！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
