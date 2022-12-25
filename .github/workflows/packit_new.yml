@@ -150,6 +150,7 @@ jobs:
           mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_5.4=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_4_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+          echo ${OP_5.4}
         fi
 
         set_510x="${{ github.event.inputs.set_510x }}"
