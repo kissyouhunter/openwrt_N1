@@ -224,8 +224,8 @@ jobs:
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         path: |
-          ${{ env.FIRMWARE }}/$OP_5.4
-          ${{ env.FIRMWARE }}/$OP_5.10
+          ${{ env.FIRMWARE }}/${{ env.OP_5.4 }}
+          ${{ env.FIRMWARE }}/${{ env.OP_5.10 }}
 
     #- name: Delete workflow runs
     #  uses: GitRML/delete-workflow-runs@main
