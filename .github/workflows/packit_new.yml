@@ -102,7 +102,7 @@ jobs:
         echo "OP_DATE=${set_ver}" >> $GITHUB_ENV
 
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@v3
         
     - name: Installing requirements 
       run: |
@@ -224,6 +224,7 @@ jobs:
         cd /tmp/packit/output
         sudo gzip -9 *
         sudo chmod 777 *
+        ls -a
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
