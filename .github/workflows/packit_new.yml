@@ -84,18 +84,18 @@ jobs:
           echo "KERNEL_5_15_Y=${set_515x}" >> $GITHUB_ENV
         fi
 
-        set_61x="${{ github.event.inputs.set_519x }}"
-        if [ "$set_61x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_6_1_Y=${set_61x}" >> $GITHUB_ENV
-        fi
-
         set_60x="${{ github.event.inputs.set_60x }}"
         if [ "$set_60x" = "none" ]; then
           echo "no kernel was chosen"
         else
           echo "KERNEL_6_0_Y=${set_60x}" >> $GITHUB_ENV
+        fi
+
+        set_61x="${{ github.event.inputs.set_61x }}"
+        if [ "$set_61x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          echo "KERNEL_6_1_Y=${set_61x}" >> $GITHUB_ENV
         fi
 
         set_ver="${{ github.event.inputs.set_ver }}"
@@ -179,20 +179,6 @@ jobs:
           sudo bash mk_s905d_n1-docker.sh
         fi
 
-        set_61x="${{ github.event.inputs.set_61x }}"
-        if [ "$set_61x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          cd /tmp/packit
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_6_1_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_6_1_Y
-          mv $KERNEL_6_1_Y/* ./
-          sudo bash mk_s905d_n1-docker.sh
-        fi
-
         set_60x="${{ github.event.inputs.set_60x }}"
         if [ "$set_60x" = "none" ]; then
           echo "no kernel was chosen"
@@ -206,7 +192,20 @@ jobs:
           mv $KERNEL_6_0_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
         fi
-  
+
+        set_61x="${{ github.event.inputs.set_61x }}"
+        if [ "$set_61x" = "none" ]; then
+          echo "no kernel was chosen"
+        else
+          cd /tmp/packit
+          rm -f make.env
+          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
+          sed -i 's|op-kissyouhunter|'"$KERNEL_6_1_Y"-kissyouhunter'|g' ./make.env
+          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
+          svn co $KERNEL_URL/$KERNEL_6_1_Y
+          mv $KERNEL_6_1_Y/* ./
+          sudo bash mk_s905d_n1-docker.sh
+        fi  
 
     - name: Organize files
       id: organize
