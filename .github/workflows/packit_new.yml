@@ -179,6 +179,7 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_15_Y
           mv $KERNEL_5_15_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_515=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_15_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
         fi
 
         set_60x="${{ github.event.inputs.set_60x }}"
@@ -193,6 +194,7 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_6_0_Y
           mv $KERNEL_6_0_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_60=openwrt_s905d_n1_${OP_DATE}_${KERNEL_6_0_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
         fi
 
         set_61x="${{ github.event.inputs.set_61x }}"
@@ -207,7 +209,8 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_6_1_Y
           mv $KERNEL_6_1_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-        fi  
+          echo "OP_61=openwrt_s905d_n1_${OP_DATE}_${KERNEL_6_1_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+        fi
 
     - name: Organize files
       id: organize
@@ -227,6 +230,9 @@ jobs:
         path: |
           ${{ env.FIRMWARE }}/${{ env.OP_54 }}
           ${{ env.FIRMWARE }}/${{ env.OP_510 }}
+          ${{ env.FIRMWARE }}/${{ env.OP_515 }}
+          ${{ env.FIRMWARE }}/${{ env.OP_60 }}
+          ${{ env.FIRMWARE }}/${{ env.OP_61 }}
 
     #- name: Delete workflow runs
     #  uses: GitRML/delete-workflow-runs@main
