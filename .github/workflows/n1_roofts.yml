@@ -198,7 +198,7 @@ jobs:
       uses: ncipollo/release-action@v1
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        token: ${{ secrets.RELEASES_TOKEN }}
+        token: ${{ secrets.REPO_TOKEN }}
         tag: rootfs
         replacesArtifacts: true
         artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
