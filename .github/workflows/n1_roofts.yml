@@ -197,12 +197,11 @@ jobs:
     - name: Upload firmware to release
       uses: ncipollo/release-action@v1
       if: steps.organize.outputs.status == 'success' && !cancelled()
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
+        token: ${{ secrets.RELEASES_TOKEN }}
+        tag: rootfs
+        replacesArtifacts: true
+        artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
 
     #- name: Delete workflow runs
       #uses: GitRML/delete-workflow-runs@main
