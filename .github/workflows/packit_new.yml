@@ -149,6 +149,7 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_4_Y
           mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_5.4=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_4_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
         fi
 
         set_510x="${{ github.event.inputs.set_510x }}"
@@ -163,6 +164,7 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_10_Y
           mv $KERNEL_5_10_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
+          echo "OP_5.10=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_10_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
         fi
 
         set_515x="${{ github.event.inputs.set_515x }}"
@@ -221,7 +223,9 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
-        path: ${{ env.FIRMWARE }}/*.gz
+        path: |
+          ${{ env.FIRMWARE }}/${OP_5.4}
+          ${{ env.FIRMWARE }}/${OP_5.10}
 
     #- name: Delete workflow runs
     #  uses: GitRML/delete-workflow-runs@main
