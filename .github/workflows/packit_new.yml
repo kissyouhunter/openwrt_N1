@@ -227,13 +227,42 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
+        name: ${{ env.OP_54 }}
         path: |
           ${{ env.FIRMWARE }}/${{ env.OP_54 }}
-          ${{ env.FIRMWARE }}/${{ env.OP_510 }}
-          ${{ env.FIRMWARE }}/${{ env.OP_515 }}
-          ${{ env.FIRMWARE }}/${{ env.OP_60 }}
-          ${{ env.FIRMWARE }}/${{ env.OP_61 }}
 
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_510 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_510 }}
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_515 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_515 }}
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_60 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_60 }}
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@master
+      if: steps.organize.outputs.status == 'success' && !cancelled()
+      with:
+        name: ${{ env.OP_61 }}
+        path: |
+          ${{ env.FIRMWARE }}/${{ env.OP_61 }}
+                                        
     #- name: Delete workflow runs
     #  uses: GitRML/delete-workflow-runs@main
     #  with:
