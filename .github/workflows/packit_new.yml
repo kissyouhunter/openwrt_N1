@@ -140,6 +140,7 @@ jobs:
         set_54x="${{ github.event.inputs.set_54x }}"
         if [ "$set_54x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_54=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -149,12 +150,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_4_Y
           mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-          echo "OP_54=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_4_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+          echo "OP_54=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_510x="${{ github.event.inputs.set_510x }}"
         if [ "$set_510x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_510=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -164,12 +166,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_10_Y
           mv $KERNEL_5_10_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-          echo "OP_510=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_10_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+          echo "OP_510=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_10_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_515x="${{ github.event.inputs.set_515x }}"
         if [ "$set_515x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_515=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -179,12 +182,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_5_15_Y
           mv $KERNEL_5_15_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-          echo "OP_515=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_15_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+          echo "OP_515=openwrt_s905d_n1_${OP_DATE}_${KERNEL_5_15_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_60x="${{ github.event.inputs.set_60x }}"
         if [ "$set_60x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_60=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -194,12 +198,13 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_6_0_Y
           mv $KERNEL_6_0_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-          echo "OP_60=openwrt_s905d_n1_${OP_DATE}_${KERNEL_6_0_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+          echo "OP_60=openwrt_s905d_n1_${OP_DATE}_${KERNEL_6_0_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_61x="${{ github.event.inputs.set_61x }}"
         if [ "$set_61x" = "none" ]; then
           echo "no kernel was chosen"
+          echo "OP_61=none" >> $GITHUB_ENV
         else
           cd /tmp/packit
           rm -f make.env
@@ -209,7 +214,7 @@ jobs:
           svn co $KERNEL_URL/$KERNEL_6_1_Y
           mv $KERNEL_6_1_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
-          echo "OP_61=openwrt_s905d_n1_${OP_DATE}_${KERNEL_6_1_Y}-kissyouhunter.img.gz " >> $GITHUB_ENV
+          echo "OP_61=openwrt_s905d_n1_${OP_DATE}_${KERNEL_6_1_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
     - name: Organize files
@@ -220,6 +225,7 @@ jobs:
         sudo gzip -9 *
         sudo chmod 777 *
         ls -a
+        ls -a /tmp/packit/output
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
@@ -262,7 +268,7 @@ jobs:
         name: ${{ env.OP_61 }}
         path: |
           ${{ env.FIRMWARE }}/${{ env.OP_61 }}
-                                        
+
     #- name: Delete workflow runs
     #  uses: GitRML/delete-workflow-runs@main
     #  with:
