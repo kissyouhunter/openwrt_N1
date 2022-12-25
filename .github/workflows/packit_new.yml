@@ -234,5 +234,5 @@ jobs:
       run: |
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库打包的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_519x }} ${{ github.event.inputs.set_60x }} 固件顺利完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您使用kissyouhunter仓库打包的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_60x }} ${{ github.event.inputs.set_61x }} 固件顺利完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi
