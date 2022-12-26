@@ -274,6 +274,7 @@ jobs:
         token: ${{ secrets.REPO_TOKEN }}
         name:  Openwrt_N1_without_docker
         tag: n1_openwrt
+        commint: main
         replacesArtifacts: true
         body: |
           ## Openwrt_N1:
