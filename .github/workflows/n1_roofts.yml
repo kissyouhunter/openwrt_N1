@@ -199,7 +199,8 @@ jobs:
       if: steps.organize.outputs.status == 'success' && !cancelled()
       with:
         token: ${{ secrets.REPO_TOKEN }}
-        tag: rootfs_new
+        name: rootfs
+        tag: rootfs
         replacesArtifacts: true
         artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
 
