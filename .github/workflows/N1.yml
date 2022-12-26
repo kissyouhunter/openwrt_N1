@@ -298,10 +298,11 @@ jobs:
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_61=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_1_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
+        echo "status=success" >> $GITHUB_OUTPUT
         
     - name: Organize files
       id: organize
-      if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+      if: steps.pack.outputs.status == 'success' && !cancelled()
       run: |
         cd /tmp/packit/output
         sudo gzip -9 *
@@ -312,7 +313,7 @@ jobs:
 
     - name: Upload firmware roofts
       uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: openwrt-armvirt-64-default-rootfs.tar.gz
         path: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
@@ -330,7 +331,7 @@ jobs:
 
     - name: Upload firmware Kernel_5_4_Y
       uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: ${{ env.OP_54 }}
         path: |
@@ -338,7 +339,7 @@ jobs:
 
     - name: Upload firmware Kernel_5_10_Y
       uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: ${{ env.OP_510 }}
         path: |
@@ -346,7 +347,7 @@ jobs:
 
     - name: Upload firmware Kernel_5_15_Y
       uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: ${{ env.OP_515 }}
         path: |
@@ -354,7 +355,7 @@ jobs:
 
     - name: Upload firmware Kernel_6_0_Y
       uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: ${{ env.OP_60 }}
         path: |
@@ -362,7 +363,7 @@ jobs:
 
     - name: Upload firmware Kernel_6_1_Y
       uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
         name: ${{ env.OP_61 }}
         path: |
