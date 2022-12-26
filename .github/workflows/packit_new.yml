@@ -275,7 +275,6 @@ jobs:
         name:  Openwrt_N1_without_docker
         tag: n1_openwrt
         commit: main
-        removeArtifacts: true
         allowUpdates: true
         repo: Openwrt_X86-Openwrt_N1-Armbian_N1
         body: |
