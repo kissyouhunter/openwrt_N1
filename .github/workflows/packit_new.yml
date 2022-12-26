@@ -277,6 +277,7 @@ jobs:
         commit: main
         removeArtifacts: true
         allowUpdates: true
+        repo: Openwrt_X86-Openwrt_N1-Armbian_N1
         body: |
           ## Openwrt_N1:
 
