@@ -275,7 +275,7 @@ jobs:
         name:  Openwrt_N1_without_docker
         tag: n1_openwrt
         commit: main
-        replacesArtifacts: true
+        allowUpdates: true
         body: |
           ## Openwrt_N1:
 
