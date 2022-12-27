@@ -32,6 +32,10 @@ on:
         description: "VER: 22.12.1 / ..."
         required: false
         default: "22.12.1"
+      upload_firmware:
+        description: "whether to  upload firmware."
+        required: false
+        default: "false"
 
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
@@ -39,7 +43,6 @@ env:
   ROOTFS_URL: https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-default-rootfs.tar.gz
   KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
   UPLOAD_BIN_DIR: false
-  UPLOAD_FIRMWARE: true
   SERVERCHAN_SCKEY: true
   USE_CACHEWRTBUILD: true
   TZ: Asia/Shanghai
@@ -100,6 +103,8 @@ jobs:
 
         set_ver="${{ github.event.inputs.set_ver }}"
         echo "OP_DATE=${set_ver}" >> $GITHUB_ENV
+        upload_firmware="${{ github.event.inputs.upload_firmware }}"
+        echo "UPLOAD_FIRMWARE=${upload_firmware}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v3
