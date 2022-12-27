@@ -16,6 +16,10 @@ rm -rf ./feeds/luci/applications/luci-app-jd-dailybonus
 rm -rf ./feeds/luci/collections/luci-lib-docker
 rm -rf ./feeds/luci/applications/luci-app-cpufreq
 rm -rf ./feeds/luci/applications/luci-app-dockerman
+rm -rf ./feeds/luci/applications/luci-app-aliyundrive-fuse
+rm -rf ./feeds/luci/applications/luci-app-aliyundrive-webdav
+rm -rf ./feeds/packages/multimedia/aliyundrive-fuse
+rm -rf ./feeds/packages/multimedia/aliyundrive-webdav
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
