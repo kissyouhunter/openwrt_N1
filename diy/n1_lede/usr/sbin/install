@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -f "/root/install-to-emmc.sh" ]; then
+	cd /root && bash install-to-emmc.sh
+else
+	exit 1
+fi
+exit 0

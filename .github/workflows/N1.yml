@@ -170,6 +170,7 @@ jobs:
         cd openwrt
         mkdir -p files/usr/sbin
         cp $GITHUB_WORKSPACE/diy/n1_lede/usr/sbin/update files/usr/sbin/update -v
+        cp $GITHUB_WORKSPACE/diy/n1_lede/usr/sbin/install files/usr/sbin/install -v
         chmod -R 755 .
  
     - name: SSH connection to Actions
