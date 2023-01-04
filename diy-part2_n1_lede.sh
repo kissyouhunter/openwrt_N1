@@ -102,3 +102,11 @@ sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds
 #暂时修复python3
 #sed -i 's/PKG_VERSION:=*.*/PKG_VERSION:=4.8/g' tools/sed/Makefile
 #sed -i 's/PKG_HASH:=*.*/PKG_HASH:=f79b0cfea71b37a8eeec8490db6c5f7ae7719c35587f21edb0617f370eeff633/g' tools/sed/Makefile
+
+#添加 aliyundrive-fuse
+svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/aliyundrive-fuse ./package/aliyundrive-fuse
+svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/luci-app-aliyundrive-fuse ./package/luci-app-aliyundrive-fuse
+
+#添加aliyundrive-webdav
+svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav ./package/aliyundrive-webdav
+svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav ./package/luci-app-aliyundrive-webdav
