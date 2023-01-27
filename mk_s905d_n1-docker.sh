@@ -39,7 +39,6 @@ TGT_IMG="${WORK_DIR}/openwrt_${SOC}_${BOARD}_${OPENWRT_VER}_k${KERNEL_VERSION}${
 
 # 补丁和脚本
 ###########################################################################
-REGULATORY_DB="${PWD}/files/regulatory.db.tar.gz"
 KMOD="${PWD}/files/kmod"
 KMOD_BLACKLIST="${PWD}/files/kmod_blacklist"
 MAC_SCRIPT1="${PWD}/files/fix_wifi_macaddr.sh"
@@ -47,8 +46,7 @@ MAC_SCRIPT2="${PWD}/files/find_macaddr.pl"
 MAC_SCRIPT3="${PWD}/files/inc_macaddr.pl"
 CPUSTAT_SCRIPT="${PWD}/files/cpustat"
 CPUSTAT_SCRIPT_PY="${PWD}/files/cpustat.py"
-CPUSTAT_PATCH="${PWD}/files/luci-admin-status-index-html.patch"
-CPUSTAT_PATCH_02="${PWD}/files/luci-admin-status-index-html-02.patch"
+INDEX_PATCH_HOME="${PWD}/files/index.html.patches"
 GETCPU_SCRIPT="${PWD}/files/getcpu"
 TTYD="${PWD}/files/ttyd"
 FLIPPY="${PWD}/files/scripts_deprecated/flippy_cn"
