@@ -132,8 +132,8 @@ jobs:
         curl -LO $ROOTFS_URL
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
         cd /tmp/packit/files
-        rm -f luci-admin-status-index-html-02.patch
-        cp $GITHUB_WORKSPACE/luci-admin-status-index-html-02.patch luci-admin-status-index-html-02.patch -v
+        rm -f ./index.html.patches/luci-admin-status-index-html.patch
+        cp $GITHUB_WORKSPACE/diy/n1_lede/index/luci-admin-status-index-html.patch ./index.html.patches/luci-admin-status-index-html.patch -v
         rm -f amlogic_model_database.txt
         cp $GITHUB_WORKSPACE/amlogic_model_database.txt amlogic_model_database.txt -v
         rm -f openwrt-install-amlogic
