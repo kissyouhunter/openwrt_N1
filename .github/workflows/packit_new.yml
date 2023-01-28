@@ -33,9 +33,13 @@ on:
         required: false
         default: "23.1.1"
       upload_firmware:
-        description: "whether to  upload firmware."
+        description: "whether to upload firmware."
         required: false
         default: "false"
+      release_firmware:
+        description: "whether to release firmware."
+        required: false
+        default: "true"
 
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
@@ -105,6 +109,8 @@ jobs:
         echo "OP_DATE=${set_ver}" >> $GITHUB_ENV
         upload_firmware="${{ github.event.inputs.upload_firmware }}"
         echo "UPLOAD_FIRMWARE=${upload_firmware}" >> $GITHUB_ENV
+        release_firmware="${{ github.event.inputs.release_firmware }}"
+        echo "RELEASE_FIRMWARE=${release_firmware}" >> $GITHUB_ENV
 
     - name: Checkout
       uses: actions/checkout@v3
@@ -275,7 +281,7 @@ jobs:
 
     - name: Upload firmware to release
       uses: ncipollo/release-action@v1
-      if: steps.organize.outputs.status == 'success' && !cancelled()
+      if: steps.organize.outputs.status == 'success' && env.RELEASE_FIRMWARE == 'true' && !cancelled()
       with:
         token: ${{ secrets.REPO_TOKEN }}
         name:  Openwrt_N1_without_docker
