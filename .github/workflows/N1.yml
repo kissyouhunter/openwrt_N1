@@ -214,12 +214,14 @@ jobs:
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
         mv openwrt-armvirt-64-default-rootfs.tar.gz /tmp/packit/
         cd /tmp/packit/files
+        rm -rf $GITHUB_WORKSPACE/openwrt
         rm -f ./index.html.patches/luci-admin-status-index-html.patch
         cp $GITHUB_WORKSPACE/diy/n1_lede/index/luci-admin-status-index-html.patch ./index.html.patches/luci-admin-status-index-html.patch -v
         rm -f amlogic_model_database.txt
         cp $GITHUB_WORKSPACE/amlogic_model_database.txt amlogic_model_database.txt -v
         rm -f openwrt-install-amlogic
         cp $GITHUB_WORKSPACE/openwrt-install-amlogic openwrt-install-amlogic -v
+        df -hT
 
     - name: Pack OpenWrt
       id: pack
