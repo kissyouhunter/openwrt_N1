@@ -20,10 +20,10 @@ on:
         description: "KERNEL: 5.15.x / none"
         required: false
         default: "none"
-      #set_60x:
-      #  description: "KERNEL: 6.0.x / none"
-      #  required: false
-      #  default: "none"
+      set_60x:
+        description: "KERNEL: 6.0.x / none"
+        required: false
+        default: "none"
       set_61x:
         description: "KERNEL: 6.1.x / none"
         required: false
