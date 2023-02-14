@@ -18,24 +18,20 @@ TIME() {
       }
 }
 
-volume=$(df -m | grep /dev/mmcblk2p4 | grep -v docker | awk '{print $4}')
-if [ $volume -ge 1024 ]; then
-  echo
-else
-  TIME r "p4分区为${volume}m，小于1G。删除垃圾文件后再运行更新命令"
-  exit 0
-fi
+#volume=$(df -m | grep /dev/mmcblk2p4 | grep -v docker | awk '{print $4}')
+#if [ $volume -ge 1024 ]; then
+#  echo
+#else
+#  TIME r "p4分区为${volume}m，小于1G。删除垃圾文件后再运行更新命令"
+#  exit 0
+#fi
 
-curl --connect-timeout 8 -o /tmp/google.html -s -w %{time_namelookup}: https://www.google.com > /dev/null 2>&1
-if [[ -f /tmp/google.html ]] && [[ $(grep -c "Google" /tmp/google.html) -ge '1' ]]; then
-  rm -rf /tmp/google.html
-  echo
-  #TIME y "设备网络状态正常！正在加载 更新菜单"
+if curl -s --head https://cloud.kisslove.eu.org | grep "200 OK" > /dev/null
+then
+  TIME g "菜单加载中..."
+  sleep 1
 else
-  echo
-  TIME "您的设备 科学上网状态异常！无法加载 固件升级菜单 请自行检查 网设环境设置"
-  echo "您的设备 科学上网状态异常！无法加载 固件升级菜单 请自行检查 网设环境设置" > /tmp/cloud_version
-  echo
+  TIME r "您的设备 科学上网状态异常！无法加载 固件升级菜单 请自行检查 网设环境设置"
   exit 1
 fi
 
@@ -45,24 +41,12 @@ TIME g "--- N1固件 在线更新菜单 ----"
 echo
 TIME g "[1] 更新  kiss 编译的 N1固件"
 echo
-TIME g "[2] 更新 gd772 编译的 N1固件"
-echo
 TIME r "[0] 继续做 钉子户 退出更新!"
 TIME g "----------------------------"
 read -p " 请输入 序号 敲回车确认： " CHOOSE
 case $CHOOSE in
-2)
+25656)
 echo
-
-domain_test=$(ping -c 1 drive.gd772.net &> /dev/null && echo success || echo fail)
-if [ ${domain_test} == "sucess" ];then
-  echo
-elif [ ${domain_test} == "fail" ];then
-  TIME r "N1无法科学上网，出海app没有打开路由本机代理，或者尝试更换节点。"
-  exit 0
-fi
-
-bash <(curl -Lso- http://drive.gd772.net/d/update/AutoUpdate.sh)  
   
 break
 ;;
