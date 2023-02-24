@@ -208,20 +208,11 @@ jobs:
         allowUpdates: true
         artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
 
-    #- name: Delete workflow runs
-      #uses: GitRML/delete-workflow-runs@main
-      #with:
-        #retain_days: 1
-        #keep_minimum_runs: 3
-
-    #- name: Remove old Releases
-    #  uses: dev-drprasad/delete-older-releases@v0.1.0
-    #  if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-    #  with:
-    #    keep_latest: 3
-    #    delete_tags: true
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Notify on failure
+      if: ${{ failure() }}
+      run: |
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的😭主人😭：
+          您使用kissyouhunter仓库的 N1 roofts 固件失败了，请及时处理！😭" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
     - name: telegram_bot
       run: |

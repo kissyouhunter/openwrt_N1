@@ -432,11 +432,11 @@ jobs:
           [注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件](#注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件)
         artifacts: ${{ env.FIRMWARE }}/*.img.gz
 
-    #- name: Delete workflow runs
-      #uses: GitRML/delete-workflow-runs@main
-      #with:
-        #retain_days: 1
-        #keep_minimum_runs: 3
+    - name: Notify on failure
+      if: ${{ failure() }}
+      run: |
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的😭主人😭：
+          您使用kissyouhunter仓库编译的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_60x }} ${{ github.event.inputs.set_61x }} 固件失败了,请及时处理！😭" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
 
     - name: telegram_bot
       run: |
