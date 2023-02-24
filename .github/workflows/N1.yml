@@ -42,7 +42,8 @@ env:
   REPO_BRANCH: master
   F_REPO_URL: https://github.com/unifreq/openwrt_packit
   F_REPO_BRANCH: master
-  KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
+  #KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
+  KERNEL_URL: https://cloud.kisslove.eu.org/d/onedrive/OPENWRT/N1_OP/kernel
   FEEDS_CONF: lede.feeds.conf.default
   CONFIG_FILE: n1_lede_4and6.config
   DIY_P1_SH: diy-part1_n1_lede.sh
@@ -234,10 +235,12 @@ jobs:
           cd /tmp/packit
           rm -f make.env
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_5_4_Y
-          mv $KERNEL_5_4_Y/* ./
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          #svn co $KERNEL_URL/$KERNEL_5_4_Y
+          #mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
@@ -252,8 +255,12 @@ jobs:
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_10_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_5_10_Y
-          mv $KERNEL_5_10_Y/* ./
+          curl -LO $KERNEL_URL/$KERNEL_5_10_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_10_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_10_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_10_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          #svn co $KERNEL_URL/$KERNEL_5_10_Y
+          #mv $KERNEL_5_10_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_510=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_10_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
@@ -268,8 +275,12 @@ jobs:
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_15_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_5_15_Y
-          mv $KERNEL_5_15_Y/* ./
+          curl -LO $KERNEL_URL/$KERNEL_5_15_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_15_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_15_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_15_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          #svn co $KERNEL_URL/$KERNEL_5_15_Y
+          #mv $KERNEL_5_15_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_515=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_15_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
@@ -284,8 +295,12 @@ jobs:
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_6_0_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_6_0_Y
-          mv $KERNEL_6_0_Y/* ./
+          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          #svn co $KERNEL_URL/$KERNEL_6_0_Y
+          #mv $KERNEL_6_0_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_60=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_0_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
@@ -300,8 +315,12 @@ jobs:
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_6_1_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_6_1_Y
-          mv $KERNEL_6_1_Y/* ./
+          curl -LO $KERNEL_URL/$KERNEL_6_1_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_6_1_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_6_1_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_6_1_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          #svn co $KERNEL_URL/$KERNEL_6_1_Y
+          #mv $KERNEL_6_1_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_61=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_1_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
@@ -431,6 +450,17 @@ jobs:
 
           [注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件](#注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件)
         artifacts: ${{ env.FIRMWARE }}/*.img.gz
+
+    - name: Setup Rclone
+      uses: AnimMouse/setup-rclone@v1
+      with:
+        rclone_config: ${{ secrets.RCLONE_CONFIG }}
+
+    - name: Upload to OneDrive
+      run: |
+        cd /tmp/packit/
+        sudo chmod  -R 777 .
+        rclone -v move output kiss:onedrive/OPENWRT/N1_OP
 
     - name: Notify on failure
       if: ${{ failure() }}
