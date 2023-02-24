@@ -340,6 +340,16 @@ jobs:
           [注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件](#注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件)
         artifacts: ${{ env.FIRMWARE }}/*.gz
 
+    - name: Setup Rclone
+      uses: AnimMouse/setup-rclone@v1
+      with:
+        rclone_config: ${{ secrets.RCLONE_CONFIG }}
+
+    - name: Upload to OneDrive
+      run: |
+        cd /tmp/packit/
+        rclone -v move output kiss:onedrive/OPENWRT/N1_OP
+
     - name: Notify on failure
       if: ${{ failure() }}
       run: |
