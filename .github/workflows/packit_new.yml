@@ -45,7 +45,8 @@ env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
   ROOTFS_URL: https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-default-rootfs.tar.gz
-  KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
+  #KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
+  KERNEL_URL: https://cloud.kisslove.eu.org/d/onedrive/OPENWRT/N1_OP/kernel
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
   USE_CACHEWRTBUILD: true
@@ -118,8 +119,8 @@ jobs:
     - name: Installing requirements 
       run: |
         docker rmi `docker images -q`
-        sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
+        #sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
+        #sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
         sudo -E apt-get update
         sudo -E apt-get install subversion -y
         sudo -E apt-get -y autoremove --purge
@@ -158,8 +159,12 @@ jobs:
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          svn co $KERNEL_URL/$KERNEL_5_4_Y
-          mv $KERNEL_5_4_Y/* ./
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          curl -LO $KERNEL_URL/$KERNEL_5_4_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
+          #svn co $KERNEL_URL/$KERNEL_5_4_Y
+          #mv $KERNEL_5_4_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
