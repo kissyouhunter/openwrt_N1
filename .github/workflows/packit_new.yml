@@ -348,6 +348,7 @@ jobs:
     - name: Upload to OneDrive
       run: |
         cd /tmp/packit/
+        sudo chmod  -R 777 .
         rclone -v move output kiss:onedrive/OPENWRT/N1_OP
 
     - name: Notify on failure
