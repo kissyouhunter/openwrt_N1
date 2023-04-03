@@ -48,5 +48,5 @@
 +		<tr><td width="33%"><%:CPU状态%></td><td id="cpustat">-</td></tr>
  		<tr><td width="33%"><%:Load Average%></td><td id="loadavg">-</td></tr>
  		<tr><td width="33%"><%:CPU usage (%)%></td><td id="cpuusage">-</td></tr>
-+		<tr><td width="33%"><%:编译作者%></td><td><a href="https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1" target="_blank">kisyouhunter</a> 
++		<tr><td width="33%"><%:编译作者%></td><td><a href="https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1" target="_blank">kissyouhunter</a> 
  	</table>
