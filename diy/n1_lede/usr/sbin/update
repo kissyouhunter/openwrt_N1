@@ -60,7 +60,7 @@ elif [ ${domain_test} == "fail" ];then
   exit 0
 fi
 
-bash <(curl -Lso- http://cloud.kisslove.eu.org/d/aliyun/files/update-N1.sh)
+bash <(curl -Lso- https://cloud.kisslove.eu.org/d/onedrive/OPENWRT/files/update-N1.sh)
 break
 ;;
 0)
