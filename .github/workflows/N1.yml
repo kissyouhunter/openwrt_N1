@@ -209,7 +209,7 @@ jobs:
         cd /tmp/packit
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
         cd $GITHUB_WORKSPACE/openwrt/bin/targets/*/*
-        mv openwrt-armvirt-64-default-rootfs.tar.gz /tmp/packit/
+        mv openwrt-armvirt-64-generic-rootfs.tar.gz /tmp/packit/
         cd /tmp/packit/files
         rm -rf $GITHUB_WORKSPACE/openwrt
         rm -f ./index.html.patches/luci-admin-status-index-html.patch
@@ -330,7 +330,7 @@ jobs:
       run: |
         cd /tmp/packit/output
         sudo gzip -9 *
-        sudo mv ../openwrt-armvirt-64-default-rootfs.tar.gz ./
+        sudo mv ../openwrt-armvirt-64-generic-rootfs.tar.gz ./
         sudo chmod 777 *
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
@@ -339,8 +339,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       with:
-        name: openwrt-armvirt-64-default-rootfs.tar.gz
-        path: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
+        name: openwrt-armvirt-64-generic-rootfs.tar.gz
+        path: ${{ env.FIRMWARE }}/openwrt-armvirt-64-generic-rootfs.tar.gz
 
     - name: Upload firmware roofts to release
       uses: ncipollo/release-action@v1
@@ -351,7 +351,7 @@ jobs:
         tag: rootfs
         commit: main
         allowUpdates: true
-        artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
+        artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-generic-rootfs.tar.gz
 
     - name: Upload firmware Kernel_5_4_Y
       uses: actions/upload-artifact@master
