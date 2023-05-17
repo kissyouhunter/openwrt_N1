@@ -160,8 +160,6 @@ jobs:
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
           #svn co $KERNEL_URL/$KERNEL_5_4_Y
           #mv $KERNEL_5_4_Y/* ./
-          du -sh *
-          cat make.env
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
@@ -204,26 +202,6 @@ jobs:
           #mv $KERNEL_5_15_Y/* ./
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_515=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_15_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
-        fi
-
-        set_60x="${{ github.event.inputs.set_60x }}"
-        if [ "$set_60x" = "none" ]; then
-          echo "no kernel was chosen"
-          echo "OP_60=none" >> $GITHUB_ENV
-        else
-          cd /tmp/packit
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_6_0_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
-          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
-          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
-          curl -LO $KERNEL_URL/$KERNEL_6_0_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
-          #svn co $KERNEL_URL/$KERNEL_6_0_Y
-          #mv $KERNEL_6_0_Y/* ./
-          sudo bash mk_s905d_n1-docker.sh
-          echo "OP_60=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_0_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
 
         set_61x="${{ github.event.inputs.set_61x }}"
@@ -280,14 +258,6 @@ jobs:
         name: ${{ env.OP_515 }}
         path: |
           ${{ env.FIRMWARE }}/${{ env.OP_515 }}
-
-    - name: Upload firmware Kernel_6_0_Y
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: ${{ env.OP_60 }}
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.OP_60 }}
 
     - name: Upload firmware Kernel_6_1_Y
       uses: actions/upload-artifact@master
