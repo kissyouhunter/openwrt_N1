@@ -161,6 +161,7 @@ jobs:
           #svn co $KERNEL_URL/$KERNEL_5_4_Y
           #mv $KERNEL_5_4_Y/* ./
           du -sh *
+          cat make.env
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
