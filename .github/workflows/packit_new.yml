@@ -20,18 +20,14 @@ on:
         description: "KERNEL: 5.15.x / none"
         required: false
         default: "none"
-      set_60x:
-        description: "KERNEL: 6.0.x / none"
-        required: false
-        default: "none"
       set_61x:
         description: "KERNEL: 6.1.x / none"
         required: false
         default: "none"
       set_ver:
-        description: "VER: 23.2.14 / ..."
+        description: "VER: 23.5.1 / ..."
         required: false
-        default: "23.2.14"
+        default: "23.5.1"
       upload_firmware:
         description: "whether to upload firmware."
         required: false
