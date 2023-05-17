@@ -179,7 +179,7 @@ jobs:
         tag: rootfs
         commit: main
         allowUpdates: true
-        artifacts: ${{ env.FIRMWARE }}/openwrt-armvirt-64-default-rootfs.tar.gz
+        artifacts: ${{ env.FIRMWARE }}/openwrt-*-rootfs.tar.gz
 
     - name: Notify on failure
       if: ${{ failure() }}
