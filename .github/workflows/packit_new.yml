@@ -40,7 +40,7 @@ on:
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
-  ROOTFS_URL: https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-default-rootfs.tar.gz
+  ROOTFS_URL: https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-generic-rootfs.tar.gz
   KERNEL_URL: https://cloud.kisslove.eu.org/d/onedrive/OPENWRT/N1_OP/kernel
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
