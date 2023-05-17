@@ -131,7 +131,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH /tmp/packit
         sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
         cd /tmp/packit
-        wget $ROOTFS_URL
+        curl -LO $ROOTFS_URL
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
         cd /tmp/packit/files
         rm -f ./index.html.patches/luci-admin-status-index-html.patch
