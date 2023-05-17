@@ -41,7 +41,6 @@ env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
   ROOTFS_URL: https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-default-rootfs.tar.gz
-  #KERNEL_URL: https://github.com/kissyouhunter/kernel_N1/trunk/kernel
   KERNEL_URL: https://cloud.kisslove.eu.org/d/onedrive/OPENWRT/N1_OP/kernel
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
@@ -132,7 +131,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH /tmp/packit
         sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
         cd /tmp/packit
-        curl -LO $ROOTFS_URL
+        wget $ROOTFS_URL
         cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
         cd /tmp/packit/files
         rm -f ./index.html.patches/luci-admin-status-index-html.patch
@@ -161,7 +160,6 @@ jobs:
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
           #svn co $KERNEL_URL/$KERNEL_5_4_Y
           #mv $KERNEL_5_4_Y/* ./
-          du -sh *
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
