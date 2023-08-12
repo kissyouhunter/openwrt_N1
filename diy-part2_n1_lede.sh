@@ -100,9 +100,9 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
 
 #添加 aliyundrive-fuse
-svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/aliyundrive-fuse ./package/aliyundrive-fuse
-svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/luci-app-aliyundrive-fuse ./package/luci-app-aliyundrive-fuse
+svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/aliyundrive-fuse ./feeds/packages/multimedia/aliyundrive-fuse
+svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/luci-app-aliyundrive-fuse ./feeds/luci/applications/luci-app-aliyundrive-fuse
 
 #添加aliyundrive-webdav
-svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav ./package/aliyundrive-webdav
-svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav ./package/luci-app-aliyundrive-webdav
+svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav ./feeds/packages/multimedia/aliyundrive-webdav
+svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav ./feeds/luci/applications/luci-app-aliyundrive-webdav
