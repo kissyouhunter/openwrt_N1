@@ -20,6 +20,10 @@ rm -rf ./feeds/luci/applications/luci-app-aliyundrive-fuse
 rm -rf ./feeds/luci/applications/luci-app-aliyundrive-webdav
 rm -rf ./feeds/packages/multimedia/aliyundrive-fuse
 rm -rf ./feeds/packages/multimedia/aliyundrive-webdav
+rm -rf ./feeds/luci/applications/luci-app-mosdns
+rm -rf ./feeds/packages/net/mosdns
+rm -rf ./feeds/packages/utils/v2dat
+rm -rf ./feeds/packages/net/v2ray-geodata
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
@@ -106,3 +110,7 @@ svn co https://github.com/messense/aliyundrive-fuse/trunk/openwrt/luci-app-aliyu
 #添加aliyundrive-webdav
 svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/aliyundrive-webdav ./feeds/packages/multimedia/aliyundrive-webdav
 svn co https://github.com/messense/aliyundrive-webdav/trunk/openwrt/luci-app-aliyundrive-webdav ./feeds/luci/applications/luci-app-aliyundrive-webdav
+
+#添加mosdns
+git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
+git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
