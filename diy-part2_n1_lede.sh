@@ -24,6 +24,8 @@ rm -rf ./feeds/luci/applications/luci-app-mosdns
 rm -rf ./feeds/packages/net/mosdns
 rm -rf ./feeds/packages/utils/v2dat
 rm -rf ./feeds/packages/net/v2ray-geodata
+rm -rf ./feeds/packages/utils/prometheus-node-exporter-lua
+rm -rf ./package/feeds/packages/prometheus-node-exporter-lua
 
 # Modify default IP
 #sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
