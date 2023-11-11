@@ -9,9 +9,9 @@ src-git passwall https://github.com/xiaorouji/openwrt-passwall.git
 src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages.git
 #src-git passwall_luci https://github.com/xiaorouji/openwrt-passwall.git;luci
 src-git kiss https://github.com/kissyouhunter/openwrt-packages
-src-git helloworld https://github.com/fw876/helloworld
+src-git helloworld https://github.com/fw876/helloworld;main
 src-git openclash https://github.com/vernesong/OpenClash.git
 src-git dockerman https://github.com/lisaac/luci-app-dockerman
 src-git docker https://github.com/lisaac/luci-lib-docker
 src-git luci https://github.com/coolsnowwolf/luci
-
+src-git amlogic https://github.com/ophub/luci-app-amlogic
