@@ -105,7 +105,8 @@ sed -i 's|500000|1000000|g' ./feeds/amlogic/luci-app-amlogic/root/etc/config/aml
 sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds/kiss/luci-app-tencentddns/files/luci/controller/*.lua
 
 #aliyundrive-webdav
-mv ./feed/kiss/aliyundrive-webdav ./feeds/packages/multimedia/aliyundrive-webdav
+mv ./feeds/kiss/aliyundrive-webdav ./feeds/packages/multimedia/aliyundrive-webdav
+
 #添加mosdns
 git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
