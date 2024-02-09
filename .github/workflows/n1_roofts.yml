@@ -55,9 +55,14 @@ jobs:
         echo -e "$(sudo lshw -short -C memory | grep GiB)\n"
         echo "--------------------------硬盘信息--------------------------"
         echo "硬盘数量: $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT
+        cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c > CPU
+        cat /proc/cpuinfo | grep "cpu cores" | uniq >> CPU
+        sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
+        CPUNAME="$(awk 'NR==1' CPU)" && CPUCORES="$(awk 'NR==2' CPU)"
+        rm -rf CPU
         if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
           curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库的 {CPU型号为 [ $(cat /proc/cpuinfo | grep -m1 name | awk -F: '{print $2}') ] CPU物理数量 为 [ $(cat /proc/cpuinfo | grep "physical id" | sort | uniq | wc -l) ] CPU核心数量为 [ $(nproc) ] 内存为 [ $(sudo lshw -short -C memory | grep GiB) ] 硬盘数量为 [ $(ls /dev/sd* | grep -v [1-9] | wc -l)" && df -hT ] 的机器} 编译您自己的 N1 roofts 固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
+          您正在使用kissyouhunter仓库的 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 编译您自己的 N1 roofts 固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
         fi        
 
     - name: Initialization environment
@@ -93,7 +98,7 @@ jobs:
       run: |
         df -hT $GITHUB_WORKSPACE
         df -hT $PWD
-        git clone -q --single-branch --depth=1 $REPO_URL -b $REPO_BRANCH openwrt
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
     - name: Load custom feeds
