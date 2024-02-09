@@ -110,3 +110,6 @@ mv ./feeds/kiss/aliyundrive-webdav ./feeds/packages/multimedia/aliyundrive-webda
 #添加mosdns
 git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
+
+#修复 xfsprogs
+sed -i 's/TARGET_CFLAGS += -DHAVE_MAP_SYNC/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/' ./feeds/packages/utils/xfsprogs/Makefile
