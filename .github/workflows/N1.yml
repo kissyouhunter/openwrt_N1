@@ -442,7 +442,7 @@ jobs:
       run: |
         cd /tmp/packit/
         sudo chmod  -R 777 .
-        rclone -v move output jollifia_kisse5:onedrive/OPENWRT/N1_OP
+        rclone -v move output kiss_blockads:onedrive/OPENWRT/N1_OP
 
     - name: Notify on failure
       if: ${{ failure() }}
