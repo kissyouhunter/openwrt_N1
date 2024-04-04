@@ -239,7 +239,7 @@ jobs:
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_6_6_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          wget -O /tmp/kernel/kernel/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz $KERNEL_URL/$KERNEL_6_6_Y/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz
+          wget -O /tmp/kernel/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz $KERNEL_URL/$KERNEL_6_6_Y/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz
           wget -O /tmp/kernel/modules-$KERNEL_6_6_Y-kissyouhunter.tar.gz $KERNEL_URL/$KERNEL_6_6_Y/modules-$KERNEL_6_6_Y-kissyouhunter.tar.gz
           wget -O  /tmp/kernel/dtb-amlogic-$KERNEL_6_6_Y-kissyouhunter.tar.gz $KERNEL_URL/$KERNEL_6_6_Y/dtb-amlogic-$KERNEL_6_6_Y-kissyouhunter.tar.gz
           wget -O /tmp/kernel/header-$KERNEL_6_6_Y-kissyouhunter.tar.gz $KERNEL_URL/$KERNEL_6_6_Y/header-$KERNEL_6_6_Y-kissyouhunter.tar.gz
