@@ -18,6 +18,8 @@ SUBVER=$1
 
 # Kernel image sources
 ###################################################################
+KERNEL_TAGS="stable"
+KERNEL_BRANCHES="mainline:all:>=:5.4"
 MODULES_TGZ=${KERNEL_PKG_HOME}/modules-${KERNEL_VERSION}.tar.gz
 check_file ${MODULES_TGZ}
 BOOT_TGZ=${KERNEL_PKG_HOME}/boot-${KERNEL_VERSION}.tar.gz
@@ -132,8 +134,8 @@ SSHD_CIPHERS="aes128-gcm@openssh.com,aes256-gcm@openssh.com,aes256-ctr,aes192-ct
 check_depends
 
 SKIP_MB=4
-BOOT_MB=160
-ROOTFS_MB=736
+BOOT_MB=256
+ROOTFS_MB=960
 SIZE=$((SKIP_MB + BOOT_MB + ROOTFS_MB))
 create_image "$TGT_IMG" "$SIZE"
 create_partition "$TGT_DEV" "msdos" "$SKIP_MB" "$BOOT_MB" "fat32" "0" "-1" "btrfs"
