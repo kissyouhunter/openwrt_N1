@@ -235,16 +235,14 @@ jobs:
         else
           cd /tmp/packit
           rm -f make.env
+          mkdir kernel
           cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
           sed -i 's|op-kissyouhunter|'"$KERNEL_6_6_Y"-kissyouhunter'|g' ./make.env
           sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz
-          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/modules-$KERNEL_6_6_Y-kissyouhunter.tar.gz
-          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/dtb-amlogic-$KERNEL_6_6_Y-kissyouhunter.tar.gz
-          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/header-$KERNEL_6_6_Y-kissyouhunter.tar.gz
-          #svn co $KERNEL_URL/$KERNEL_6_6_Y
-          #mv $KERNEL_6_6_Y/* ./
-          ls -a
+          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz ./kernel
+          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/modules-$KERNEL_6_6_Y-kissyouhunter.tar.gz ./kernel
+          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/dtb-amlogic-$KERNEL_6_6_Y-kissyouhunter.tar.gz ./kernel
+          curl -LO $KERNEL_URL/$KERNEL_6_6_Y/header-$KERNEL_6_6_Y-kissyouhunter.tar.gz ./kernel
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_66=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_6_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
