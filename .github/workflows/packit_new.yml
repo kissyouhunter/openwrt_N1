@@ -244,6 +244,7 @@ jobs:
           curl -LO $KERNEL_URL/$KERNEL_6_6_Y/header-$KERNEL_6_6_Y-kissyouhunter.tar.gz
           #svn co $KERNEL_URL/$KERNEL_6_6_Y
           #mv $KERNEL_6_6_Y/* ./
+          ls -a
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_66=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_6_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
