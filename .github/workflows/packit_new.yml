@@ -152,7 +152,7 @@ jobs:
           echo "no kernel was chosen"
           echo "OP_54=none" >> $GITHUB_ENV
         else
-          cd /tmp/kernel
+          cd /tmp/packit
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/boot-$KERNEL_5_4_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
@@ -170,7 +170,7 @@ jobs:
           echo "no kernel was chosen"
           echo "OP_510=none" >> $GITHUB_ENV
         else
-          cd /tmp/kernel
+          cd /tmp/packit
           curl -LO $KERNEL_URL/$KERNEL_5_10_Y/boot-$KERNEL_5_10_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_10_Y/modules-$KERNEL_5_10_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_10_Y/dtb-amlogic-$KERNEL_5_10_Y-kissyouhunter.tar.gz
@@ -188,7 +188,7 @@ jobs:
           echo "no kernel was chosen"
           echo "OP_515=none" >> $GITHUB_ENV
         else
-          cd /tmp/kernel
+          cd /tmp/packit
           curl -LO $KERNEL_URL/$KERNEL_5_15_Y/boot-$KERNEL_5_15_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_15_Y/modules-$KERNEL_5_15_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_15_Y/dtb-amlogic-$KERNEL_5_15_Y-kissyouhunter.tar.gz
@@ -206,7 +206,7 @@ jobs:
           echo "no kernel was chosen"
           echo "OP_61=none" >> $GITHUB_ENV
         else
-          cd /tmp/kernel
+          cd /tmp/packit
           curl -LO $KERNEL_URL/$KERNEL_6_1_Y/boot-$KERNEL_6_1_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_6_1_Y/modules-$KERNEL_6_1_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_6_1_Y/dtb-amlogic-$KERNEL_6_1_Y-kissyouhunter.tar.gz
@@ -224,7 +224,7 @@ jobs:
           echo "no kernel was chosen"
           echo "OP_66=none" >> $GITHUB_ENV
         else
-          cd /tmp/kernel
+          cd /tmp/packit
           curl -LO $KERNEL_URL/$KERNEL_6_6_Y/boot-$KERNEL_6_6_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_6_6_Y/modules-$KERNEL_6_6_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_6_6_Y/dtb-amlogic-$KERNEL_6_6_Y-kissyouhunter.tar.gz
