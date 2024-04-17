@@ -31,7 +31,7 @@ on:
       set_ver:
         description: "VER: 24.4.4 / ..."
         required: false
-        default: "24.2.2"
+        default: "24.4.4"
       upload_firmware:
         description: "whether to upload firmware."
         required: false
