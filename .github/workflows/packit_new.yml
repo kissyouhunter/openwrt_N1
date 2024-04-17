@@ -48,7 +48,6 @@ env:
   KERNEL_URL: https://cloud.kisslove.eu.org/d/onedrive/OPENWRT/N1_OP/kernel
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
-  USE_CACHEWRTBUILD: true
   TZ: Asia/Shanghai
 
 jobs:
@@ -162,8 +161,7 @@ jobs:
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/modules-$KERNEL_5_4_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/dtb-amlogic-$KERNEL_5_4_Y-kissyouhunter.tar.gz
           curl -LO $KERNEL_URL/$KERNEL_5_4_Y/header-$KERNEL_5_4_Y-kissyouhunter.tar.gz
-          #svn co $KERNEL_URL/$KERNEL_5_4_Y
-          #mv $KERNEL_5_4_Y/* ./
+          ls -a
           sudo bash mk_s905d_n1-docker.sh
           echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
         fi
