@@ -29,6 +29,7 @@ env:
   CONFIG_FILE: n1_lede_4and6.config
   DIY_P1_SH: diy-part1_n1_lede.sh
   DIY_P2_SH: diy-part2_n1_lede.sh
+  CUSTOM: custom.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
@@ -119,9 +120,13 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
+        chmox +x $CUSTOM
+        $GITHUB_WORKSPACE/$CUSTOM
 
     - name: Install feeds
-      run: cd openwrt && ./scripts/feeds install -a
+      run: |
+        cd openwrt && ./scripts/feeds install -a
+
 
     - name: SSH connection to Actions
       uses: P3TERX/ssh2actions@v1.0.0
