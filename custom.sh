@@ -17,4 +17,4 @@ sed -i "s|PKG_SOURCE_URL:=.*|PKG_SOURCE_URL:=$PKG_SOURCE_URL|g" $MAKEFILE_PATH
 sed -i "s|PKG_MD5SUM:=.*|PKG_MD5SUM:=$PKG_MD5SUM|g" $MAKEFILE_PATH
 sed -i "s|PKG_RELEASE:=.*|PKG_RELEASE:=$PKG_VERSION|g" $MAKEFILE_PATH
 cp -f Makefile_uugamebooster ./feeds/packages/net/uugamebooster/Makefile
-cp -f Makefile_uugamebooster ./package/feeds/packages/uugamebooster/Makefile
+#cp -f Makefile_uugamebooster ./package/feeds/packages/uugamebooster/Makefile
