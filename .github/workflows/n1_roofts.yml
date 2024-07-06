@@ -120,6 +120,7 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
+        ls $GITHUB_WORKSPACE
         chmod +x $CUSTOM
         $GITHUB_WORKSPACE/$CUSTOM
 
