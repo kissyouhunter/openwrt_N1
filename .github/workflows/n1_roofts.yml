@@ -101,7 +101,6 @@ jobs:
     - name: Clone source code
       run: |
         df -hT $GITHUB_WORKSPACE
-        df -hT
         git clone $REPO_URL -b $REPO_BRANCH openwrt
 
     - name: Load custom feeds
