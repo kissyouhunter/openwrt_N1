@@ -88,19 +88,20 @@ jobs:
         upload_firmware="${{ github.event.inputs.upload_firmware }}"
         echo "UPLOAD_FIRMWARE=${upload_firmware}" >> $GITHUB_ENV
 
-    - name: Combine Disks
-      uses: easimon/maximize-build-space@master
-      with:
-        swap-size-mb: 1024
-        temp-reserve-mb: 100
-        root-reserve-mb: 1024
+    #- name: Combine Disks
+    #  uses: easimon/maximize-build-space@master
+    #  with:
+    #    swap-size-mb: 1024
+    #    temp-reserve-mb: 100
+    #    root-reserve-mb: 1024
 
     - name: Checkout
-      uses: actions/checkout@main
+      uses: actions/checkout@v4
 
     - name: Clone source code
       run: |
         df -hT $GITHUB_WORKSPACE
+        df -hT
         git clone $REPO_URL -b $REPO_BRANCH openwrt
 
     - name: Load custom feeds
