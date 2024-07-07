@@ -88,12 +88,12 @@ jobs:
         upload_firmware="${{ github.event.inputs.upload_firmware }}"
         echo "UPLOAD_FIRMWARE=${upload_firmware}" >> $GITHUB_ENV
 
-    #- name: Combine Disks
-    #  uses: easimon/maximize-build-space@master
-    #  with:
-    #    swap-size-mb: 1024
-    #    temp-reserve-mb: 100
-    #    root-reserve-mb: 1024
+    - name: Combine Disks
+      uses: easimon/maximize-build-space@master
+      with:
+        swap-size-mb: 1024
+        root-reserve-mb: 512
+        remove-dotnet: 'true'
 
     - name: Checkout
       uses: actions/checkout@v4
