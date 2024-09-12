@@ -166,7 +166,7 @@ jobs:
 
     - name: Check space usage
       if: (!cancelled())
-      run: df -hT
+      run: df -hT $GITHUB_WORKSPACE
 
     - name: Upload bin directory
       uses: actions/upload-artifact@master
