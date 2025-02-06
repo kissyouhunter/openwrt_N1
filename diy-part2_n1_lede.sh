@@ -108,5 +108,6 @@ sed -i 's/"admin", "tencentcloud"/"admin", "services", "tencentcloud"/g' ./feeds
 git clone https://github.com/sbwml/luci-app-mosdns -b v5 package/mosdns
 git clone https://github.com/sbwml/v2ray-geodata package/v2ray-geodata
 
-#修复 xfsprogs
-#sed -i 's/TARGET_CFLAGS += -DHAVE_MAP_SYNC/TARGET_CFLAGS += -DHAVE_MAP_SYNC -D_LARGEFILE64_SOURCE/' ./feeds/packages/utils/xfsprogs/Makefile
+#修复 node
+rm -rf ./feeds/packages/lang/node
+git clone https://github.com/sbwml/feeds_packages_lang_node-prebuilt -b packages-24.10 feeds/packages/lang/node
