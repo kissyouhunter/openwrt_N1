@@ -54,327 +54,190 @@ env:
   SERVERCHAN_SCKEY: true
   TZ: Asia/Shanghai
 
+concurrency:
+  group: "packit"
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-22.04
-
+    env:
+      OP_DATE: ${{ github.event.inputs.set_ver }}
+      UPLOAD_FIRMWARE: ${{ github.event.inputs.upload_firmware }}
+      RELEASE_FIRMWARE: ${{ github.event.inputs.release_firmware }}
+      UPLOAD_RCLONE: ${{ github.event.inputs.upload_rclone }}
     steps:
-    - name: telegrame_bot
-      run: |
-        cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c > CPU
-        cat /proc/cpuinfo | grep "cpu cores" | uniq >> CPU
-        sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
-        CPUNAME="$(awk 'NR==1' CPU)" && CPUCORES="$(awk 'NR==2' CPU)"
-        rm -rf CPU
-        if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：
-          您正在使用kissyouhunter仓库 {CPU型号为 [ ${CPUNAME} ] 核心数 为 [ ${CPUCORES} ] 线程数为 [ $(nproc) ]的机器} 打包 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_61x }} ${{ github.event.inputs.set_66x }} 固件,请耐心等待...... 😋" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
-        fi
+      - name: Telegram Bot (pre-build notification)
+        run: |
+          # Gather CPU info and send notification if SERVERCHAN_SCKEY is true
+          cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c > CPU
+          cat /proc/cpuinfo | grep "cpu cores" | uniq >> CPU
+          sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
+          CPUNAME="$(awk 'NR==1' CPU)"
+          CPUCORES="$(awk 'NR==2' CPU)"
+          rm -rf CPU
+          if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：您正在使用kissyouhunter仓库打包的机器[ ${CPUNAME} 核心数: ${CPUCORES} 线程: $(nproc) ]" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
+          fi
 
-    - name: choose kernel
-      run: |
-        set_54x="${{ github.event.inputs.set_54x }}"
-        if [ "$set_54x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_5_4_Y=${set_54x}" >> $GITHUB_ENV
-        fi
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        set_510x="${{ github.event.inputs.set_510x }}"
-        if [ "$set_510x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_5_10_Y=${set_510x}" >> $GITHUB_ENV
-        fi
+      - name: Installing Requirements & Cleaning Docker Images
+        run: |
+          # Clear dangling docker images to free up space
+          docker rmi $(docker images -q) || true
+          sudo -E apt-get update
+          sudo -E apt-get install subversion -y
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
 
-        set_515x="${{ github.event.inputs.set_515x }}"
-        if [ "$set_515x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_5_15_Y=${set_515x}" >> $GITHUB_ENV
-        fi
+      - name: Check Space Usage
+        if: (!cancelled())
+        run: df -hT
 
-        set_66x="${{ github.event.inputs.set_66x }}"
-        if [ "$set_66x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_6_6_Y=${set_66x}" >> $GITHUB_ENV
-        fi
-
-        set_61x="${{ github.event.inputs.set_61x }}"
-        if [ "$set_61x" = "none" ]; then
-          echo "no kernel was chosen"
-        else
-          echo "KERNEL_6_1_Y=${set_61x}" >> $GITHUB_ENV
-        fi
-
-        set_ver="${{ github.event.inputs.set_ver }}"
-        echo "OP_DATE=${set_ver}" >> $GITHUB_ENV
-        upload_firmware="${{ github.event.inputs.upload_firmware }}"
-        echo "UPLOAD_FIRMWARE=${upload_firmware}" >> $GITHUB_ENV
-        release_firmware="${{ github.event.inputs.release_firmware }}"
-        echo "RELEASE_FIRMWARE=${release_firmware}" >> $GITHUB_ENV
-        upload_rclone="${{ github.event.inputs.upload_rclone }}"
-        echo "UPLOAD_RCLONE=${upload_rclone}" >> $GITHUB_ENV
-
-    - name: Checkout
-      uses: actions/checkout@v4
-        
-    - name: Installing requirements 
-      run: |
-        docker rmi `docker images -q`
-        #sudo rm -rf /usr/share/dotnet /etc/mysql /etc/php /etc/apt/sources.list.d /usr/local/lib/android
-        #sudo -E apt-get -y purge azure-cli ghc* zulu* hhvm llvm* firefox google* dotnet* powershell openjdk* adoptopenjdk* mysql* php* mongodb* dotnet* moby* snapd* || true
-        sudo -E apt-get update
-        sudo -E apt-get install subversion -y
-        sudo -E apt-get -y autoremove --purge
-        sudo -E apt-get clean
-
-    - name: Check space usage
-      if: (!cancelled())
-      run: df -hT
-
-    - name: Download Openwrt_Packit
-      id: packit
-      run: |
-        git clone $REPO_URL -b $REPO_BRANCH /tmp/packit
-        sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
-        cd /tmp/packit
-        curl -LO $ROOTFS_URL
-        cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
-        cd /tmp/packit/files
-        rm -f ./index.html.patches/luci-admin-status-index-html.patch
-        cp $GITHUB_WORKSPACE/diy/n1_lede/index/luci-admin-status-index-html.patch ./index.html.patches/luci-admin-status-index-html.patch -v
-        rm -f amlogic_model_database.txt
-        cp $GITHUB_WORKSPACE/amlogic_model_database.txt amlogic_model_database.txt -v
-        rm -f openwrt-install-amlogic
-        cp $GITHUB_WORKSPACE/openwrt-install-amlogic openwrt-install-amlogic -v
-
-    - name: Pack OpenWrt
-      id: pack
-      run: |
-        set_54x="${{ github.event.inputs.set_54x }}"
-        if [ "$set_54x" = "none" ]; then
-          echo "no kernel was chosen"
-          echo "OP_54=none" >> $GITHUB_ENV
-        else
+      - name: Download Openwrt_Packit
+        id: packit
+        run: |
+          git clone "$REPO_URL" -b "$REPO_BRANCH" /tmp/packit
+          sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
           cd /tmp/packit
-          curl -LO $KERNEL_URL/${KERNEL_5_4_Y}.tar.gz
-          tar -xzf ${KERNEL_5_4_Y}.tar.gz
-          mv ./${KERNEL_5_4_Y}/*kissyouhunter.tar.gz ./
-          rm -rf ${KERNEL_5_4_Y}.tar.gz ${KERNEL_5_4_Y}
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_5_4_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          sudo bash mk_s905d_n1-docker.sh
-          echo "OP_54=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_4_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
-        fi
+          curl -LO "$ROOTFS_URL"
+          cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
+          cd /tmp/packit/files
+          rm -f ./index.html.patches/luci-admin-status-index-html.patch
+          cp $GITHUB_WORKSPACE/diy/n1_lede/index/luci-admin-status-index-html.patch ./index.html.patches/luci-admin-status-index-html.patch -v
+          rm -f amlogic_model_database.txt
+          cp $GITHUB_WORKSPACE/amlogic_model_database.txt amlogic_model_database.txt -v
+          rm -f openwrt-install-amlogic
+          cp $GITHUB_WORKSPACE/openwrt-install-amlogic openwrt-install-amlogic -v
 
-        set_510x="${{ github.event.inputs.set_510x }}"
-        if [ "$set_510x" = "none" ]; then
-          echo "no kernel was chosen"
-          echo "OP_510=none" >> $GITHUB_ENV
-        else
-          cd /tmp/packit
-          curl -LO $KERNEL_URL/${KERNEL_5_10_Y}.tar.gz
-          tar -xzf ${KERNEL_5_10_Y}.tar.gz
-          mv ./${KERNEL_5_10_Y}/*kissyouhunter.tar.gz ./
-          rm -rf ${KERNEL_5_10_Y}.tar.gz ${KERNEL_5_10_Y}
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_5_10_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          sudo bash mk_s905d_n1-docker.sh
-          echo "OP_510=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_10_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
-        fi
+      - name: Pack OpenWrt
+        id: pack
+        run: |
+          # Define an associative array mapping input keys to kernel names
+          declare -A kernels
+          kernels=( ["set_54x"]="5.4" ["set_510x"]="5.10" ["set_515x"]="5.15" ["set_61x"]="6.1" ["set_66x"]="6.6" )
+          
+          # Iterate over each kernel option provided in inputs
+          for key in "${!kernels[@]}"; do
+            kernel_input="${{ github.event.inputs[$key] }}"
+            kernel_ver="${kernels[$key]}"
+            artifact_var="OP_${key#set_}"
+            if [ "$kernel_input" = "none" ]; then
+              echo "no kernel was chosen for version ${kernel_ver}"
+              echo "${artifact_var}=none" >> $GITHUB_ENV
+            else
+              echo "Processing kernel version ${kernel_input} for ${kernel_ver}"
+              cd /tmp/packit
+              curl -LO "$KERNEL_URL/${kernel_input}.tar.gz"
+              tar -xzf "${kernel_input}.tar.gz"
+              mv ./"${kernel_input}"/*kissyouhunter.tar.gz ./
+              rm -rf "${kernel_input}.tar.gz" "${kernel_input}"
+              rm -f make.env
+              cp "$GITHUB_WORKSPACE/make_kernel.env" make.env -v
+              # Replace op-kissyouhunter with kernel-specific tag and update the date/tag in make.env
+              sed -i 's|op-kissyouhunter|'"${kernel_input}"'-kissyouhunter|g' make.env
+              sed -i 's|date|'"${OP_DATE}"'|g' make.env
+              sudo bash mk_s905d_n1-docker.sh
+              echo "${artifact_var}=openwrt_s905d_n1_R${OP_DATE}_k${kernel_input}-kissyouhunter.img.gz" >> $GITHUB_ENV
+            fi
+          done
+          echo "status=success" >> $GITHUB_OUTPUT
 
-        set_515x="${{ github.event.inputs.set_515x }}"
-        if [ "$set_515x" = "none" ]; then
-          echo "no kernel was chosen"
-          echo "OP_515=none" >> $GITHUB_ENV
-        else
-          cd /tmp/packit
-          curl -LO $KERNEL_URL/${KERNEL_5_15_Y}.tar.gz
-          tar -xzf ${KERNEL_5_15_Y}.tar.gz
-          mv ./${KERNEL_5_15_Y}/*kissyouhunter.tar.gz ./
-          rm -rf ${KERNEL_5_15_Y}.tar.gz ${KERNEL_5_15_Y}
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_5_15_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          sudo bash mk_s905d_n1-docker.sh
-          echo "OP_515=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_5_15_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
-        fi
+      - name: Organize Files
+        id: organize
+        if: steps.pack.outputs.status == 'success' && !cancelled()
+        run: |
+          cd /tmp/packit/output
+          sudo gzip -9 *
+          sudo chmod 777 *
+          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
 
-        set_61x="${{ github.event.inputs.set_61x }}"
-        if [ "$set_61x" = "none" ]; then
-          echo "no kernel was chosen"
-          echo "OP_61=none" >> $GITHUB_ENV
-        else
-          cd /tmp/packit
-          curl -LO $KERNEL_URL/${KERNEL_6_1_Y}.tar.gz
-          tar -xzf ${KERNEL_6_1_Y}.tar.gz
-          mv ./${KERNEL_6_1_Y}/*kissyouhunter.tar.gz ./
-          rm -rf ${KERNEL_6_1_Y}.tar.gz ${KERNEL_6_1_Y}
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_6_1_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          sudo bash mk_s905d_n1-docker.sh
-          echo "OP_61=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_1_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
-        fi
+      - name: Upload Firmware Artifacts
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        run: |
+          cd "$FIRMWARE"
+          for key in set_54x set_510x set_515x set_61x set_66x; do
+            artifact_name_var="OP_${key#set_}"
+            artifact_name=$(printenv "${artifact_name_var}")
+            if [ "$artifact_name" != "none" ]; then
+              echo "Uploading artifact: $artifact_name"
+              mkdir -p artifacts
+              cp "$artifact_name" artifacts/
+            fi
+          done
 
-        set_66x="${{ github.event.inputs.set_66x }}"
-        if [ "$set_66x" = "none" ]; then
-          echo "no kernel was chosen"
-          echo "OP_66=none" >> $GITHUB_ENV
-        else
-          cd /tmp/packit
-          curl -LO $KERNEL_URL/${KERNEL_6_6_Y}.tar.gz
-          tar -xzf ${KERNEL_6_6_Y}.tar.gz
-          mv ./${KERNEL_6_6_Y}/*kissyouhunter.tar.gz ./
-          rm -rf ${KERNEL_6_6_Y}.tar.gz ${KERNEL_6_6_Y}
-          rm -f make.env
-          cp $GITHUB_WORKSPACE/make_kernel.env make.env -v
-          sed -i 's|op-kissyouhunter|'"$KERNEL_6_6_Y"-kissyouhunter'|g' ./make.env
-          sed -i 's|date|'"$OP_DATE"'|g' ./make.env
-          ls -a
-          cat ./make.env
-          sudo bash mk_s905d_n1-docker.sh
-          echo "OP_66=openwrt_s905d_n1_R${OP_DATE}_k${KERNEL_6_6_Y}-kissyouhunter.img.gz" >> $GITHUB_ENV
-        fi
+      - name: Artifact Upload
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
+        uses: actions/upload-artifact@master
+        with:
+          name: Firmware_Images
+          path: ${{ env.FIRMWARE }}/*.gz
 
-        echo "status=success" >> $GITHUB_OUTPUT
+      - name: Upload Firmware to Release
+        if: steps.organize.outputs.status == 'success' && env.RELEASE_FIRMWARE == 'true' && !cancelled()
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+          name: Openwrt_N1_without_docker
+          tag: n1_openwrt
+          commit: main
+          allowUpdates: true
+          repo: Openwrt_X86-Openwrt_N1-Armbian_N1
+          body: |
+            ## Openwrt_N1:
 
-    - name: Organize files
-      id: organize
-      if: steps.pack.outputs.status == 'success' && !cancelled()
-      run: |
-        cd /tmp/packit/output
-        sudo gzip -9 *
-        sudo chmod 777 *
-        echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-        echo "status=success" >> $GITHUB_OUTPUT
+            * IP: 192.168.2.4 ID: root Password: password
 
-    - name: Upload firmware Kernel_5_4_Y
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: ${{ env.OP_54 }}
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.OP_54 }}
+            * 刷入emmc命令： install
 
-    - name: Upload firmware Kernel_5_10_Y
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: ${{ env.OP_510 }}
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.OP_510 }}
+            * adguardhome已内置好DNS和广告过滤，下载好核心后开启即可。
 
-    - name: Upload firmware Kernel_5_15_Y
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: ${{ env.OP_515 }}
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.OP_515 }}
+            * adguardhome ID: root Password: password wifi password: password
 
-    - name: Upload firmware Kernel_6_1_Y
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: ${{ env.OP_61 }}
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.OP_61 }}
+            * N1固件不带docker,请用一键脚本自行安装。
 
-    - name: Upload firmware Kernel_6_6_Y
-      uses: actions/upload-artifact@master
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
-      with:
-        name: ${{ env.OP_66 }}
-        path: |
-          ${{ env.FIRMWARE }}/${{ env.OP_66 }}
+            * （一键脚本： bash <(curl -s -S -L https://git.io/JMl6C) 或者 curl -Lo ./kiss.sh https://git.io/JMl6C && bash kiss.sh）
 
-    - name: Upload firmware to release
-      uses: ncipollo/release-action@v1
-      if: steps.organize.outputs.status == 'success' && env.RELEASE_FIRMWARE == 'true' && !cancelled()
-      with:
-        token: ${{ secrets.REPO_TOKEN }}
-        name:  Openwrt_N1_without_docker
-        tag: n1_openwrt
-        commit: main
-        allowUpdates: true
-        repo: Openwrt_X86-Openwrt_N1-Armbian_N1
-        body: |
-          ## Openwrt_N1:
+            ### 升级方式一：
+            * 一键升级命令:（最新的固件已支持在U盘运行的openwrt）
+            * 如已刷入本固件，ssh连接n1或ttyd输入update即可。
+            * 命令一：bash <(curl -Lso- nb0.cc/k)
+            * 命令二：bash <(curl -s -S -L https://git.io/update-N1)
+            * 建议确保/mnt/mmcblk2p4/或/mnt/sda4分区剩余空间至少1G，使用df -h查看分区情况
 
-          * IP: 192.168.2.4 ID: root Password: password
+            ### 升级方式二：
+            * 若需升级emmc内固件，请使用releases中的update-amlogic-openwrt.sh脚本
+            * 将update-amlogic-openwrt.sh与img文件上传至/mnt/mmcblk2p4分区
+            * SSH连接后执行：
+              cd /mnt/mmcblk2p4/ && chmod 755 update-N1-openwrt.sh
+              ./update-N1-openwrt.sh 文件名.img
 
-          * 刷入emmc命令： install
+            [注：三分区版本的N1只能写入固件到emmc，无法直接升级固件]
+          artifacts: ${{ env.FIRMWARE }}/*.gz
 
-          * adguardhome已内置好DNS和广告过滤，下载好核心后开启即可。
+      - name: Setup Rclone
+        uses: AnimMouse/setup-rclone@v1
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_RCLONE == 'true' && !cancelled()
+        with:
+          rclone_config: ${{ secrets.RCLONE_CONFIG }}
 
-          * adguardhome ID: root Password: password wifi password: password
+      - name: Upload to OneDrive
+        if: steps.organize.outputs.status == 'success' && env.UPLOAD_RCLONE == 'true' && !cancelled()
+        run: |
+          cd /tmp/packit/
+          sudo chmod -R 777 .
+          rclone -v move output kiss_blockads:onedrive/OPENWRT/N1_OP
 
-          * N1固件不带docker,请用一键脚本自行安装。
+      - name: Notify on failure
+        if: ${{ failure() }}
+        run: |
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的😭主人😭：您使用kissyouhunter仓库打包的固件构建失败，请检查日志！" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
 
-          * （一键脚本： bash <(curl -s -S -L https://git.io/JMl6C) 或者 curl -Lo ./kiss.sh https://git.io/JMl6C && bash kiss.sh）
-
-          ### 升级方式一：
-
-          * 一键升级命令:（最新的固件已支持在U盘运行的openwrt）
-
-          * 如已刷入本固件，ssh连接n1或ttyd输入update即可。
-
-          * 命令一：bash <(curl -Lso- nb0.cc/k)
-
-          * 命令二：bash <(curl -s -S -L https://git.io/update-N1) 
-
-          * 根据命令操作就可以，强烈推荐，保证/mnt/mmcblk2p4/或/mnt/sda4分区剩余空间1G以上，查看命令df -h。
-
-          ### 升级方式二：
-
-          * 由译内核的不同，如升级emmc里的固件请用releases里的update-amlogic-openwrt.sh文件
-
-          * 将update-amlogic-openwrt.sh和img文件上传至/mnt/mmcblk2p4分区
-
-          * ssh连接n1或ttyd输入如下命令：
-
-          * cd /mnt/mmcblk2p4/ && chmod 755 update-N1-openwrt.sh
-
-          * ./update-N1-openwrt.sh 文件名.img  #img文字名请自行输入
-
-          * 跑码过程中都有中文提示，请根据提示操作即可。
-
-          * 系统重启后使用命令 rm -rf /mnt/mmcblk2p4/文件名img 删除  #img文字名请自行输入
-
-          [注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件](#注：三分区版本的N1只能重新写入固件到emmc，无法直接升级固件)
-        artifacts: ${{ env.FIRMWARE }}/*.gz
-
-    - name: Setup Rclone
-      uses: AnimMouse/setup-rclone@v1
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_RCLONE == 'true' && !cancelled()
-      with:
-        rclone_config: ${{ secrets.RCLONE_CONFIG }}
-
-    - name: Upload to OneDrive
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_RCLONE == 'true' && !cancelled()
-      run: |
-        cd /tmp/packit/
-        sudo chmod  -R 777 .
-        rclone -v move output kiss_blockads:onedrive/OPENWRT/N1_OP
-
-    - name: Notify on failure
-      if: ${{ failure() }}
-      run: |
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的😭主人😭：
-          您使用kissyouhunter仓库打包的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_61x }} ${{ github.event.inputs.set_66x }} 固件失败了，请及时处理！😭" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
-
-    - name: telegram_bot
-      run: |
-        if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：
-          您使用kissyouhunter仓库打包的 ${{ github.event.inputs.set_54x }} ${{ github.event.inputs.set_510x }} ${{ github.event.inputs.set_515x }} ${{ github.event.inputs.set_61x }} ${{ github.event.inputs.set_66x }} 固件顺利完成了！💐" "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage"
-        fi
+      - name: Telegram Bot (post-build notification)
+        run: |
+          if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：打包完成！固件版本: ${OP_DATE} ，请查收构建产物" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
+          fi
