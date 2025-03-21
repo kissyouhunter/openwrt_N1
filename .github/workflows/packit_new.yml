@@ -148,7 +148,8 @@ jobs:
               sed -i 's|op-kissyouhunter|'${kernel_input}'-kissyouhunter|g' make.env
               sed -i 's|date|'${OP_DATE}'|g' make.env
               sudo bash mk_s905d_n1-docker.sh
-              echo "${artifact_var}=openwrt_s905d_n1_R${OP_DATE}_k${kernel_input}-kissyouhunter.img.gz" >> $GITHUB_ENV
+              #echo "${artifact_var}=openwrt_s905d_n1_R${OP_DATE}_k${kernel_input}-kissyouhunter.img.gz" >> $GITHUB_ENV
+              echo "${artifact_var}=immortalwrt_s905d_n1_R${OP_DATE}_k${kernel_input}-kissyouhunter.img.gz" >> $GITHUB_ENV
             fi
           done
           echo "status=success" >> $GITHUB_OUTPUT
