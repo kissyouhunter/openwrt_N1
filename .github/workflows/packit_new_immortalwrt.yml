@@ -48,7 +48,7 @@ on:
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
-  ROOTFS_URL: https://downloads.immortalwrt.org/releases/24.10.0/targets/armsr/armv8/immortalwrt-24.10.0-armsr-armv8-generic-squashfs-rootfs.img.gz
+  ROOTFS_URL: https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs/immortalwrt-armsr-armv8-generic-rootfs.tar.gz
   KERNEL_URL: https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1/releases/download/kernel_stable
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
