@@ -77,7 +77,7 @@ jobs:
           CPUCORES="$(awk 'NR==2' CPU)"
           rm -rf CPU
           if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
-            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：您正在使用kissyouhunter仓库打包的机器[ ${CPUNAME} 核心数: ${CPUCORES} 线程: $(nproc) ]" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=🎉 主人：您正在使用kissyouhunter仓库打包的机器[ ${CPUNAME} 核心数: ${CPUCORES} 线程: $(nproc) ]" https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
           fi
 
       - name: Checkout
@@ -242,10 +242,10 @@ jobs:
       - name: Notify on failure
         if: ${{ failure() }}
         run: |
-          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的😭主人😭：您使用kissyouhunter仓库打包的固件构建失败，请检查日志！" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
+          curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的😭主人😭：您使用kissyouhunter仓库打包的固件构建失败，请检查日志！" https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
 
       - name: Telegram Bot (post-build notification)
         run: |
           if [[ "${SERVERCHAN_SCKEY}" == "true" ]]; then
-            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：打包完成！固件版本: ${OP_DATE} ，请查收构建产物" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
+            curl -k --data chat_id="${{ secrets.TELEGRAM_CHAT_ID }}" --data "text=我亲爱的✨主人✨：打包完成！固件版本: ${OP_DATE} ，请查收构建产物" https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
           fi
