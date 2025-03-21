@@ -124,10 +124,12 @@ jobs:
           # Define an associative array mapping input keys to kernel names
           declare -A kernels
           kernels=( ["set_54x"]="5.4" ["set_510x"]="5.10" ["set_515x"]="5.15" ["set_61x"]="6.1" ["set_66x"]="6.6" )
-          
+
           # Iterate over each kernel option provided in inputs
           for key in "${!kernels[@]}"; do
-            kernel_input=$(printenv "SET_${key#set_}" | tr '[:lower:]' '[:upper:]')
+            # 将变量名中的 'x' 转为大写 'X' 以匹配 env 中的定义
+            var_name="SET_$(echo "${key#set_}" | tr '[:lower:]' '[:upper:]')"
+            kernel_input=$(printenv "$var_name")
             kernel_ver="${kernels[$key]}"
             artifact_var="OP_${key#set_}"
             if [ "$kernel_input" = "none" ] || [ -z "$kernel_input" ]; then
