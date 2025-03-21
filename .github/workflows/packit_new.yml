@@ -159,7 +159,7 @@ jobs:
         run: |
           cd /tmp/packit/output
           sudo gzip -9 *
-          sudo chmod 777 *
+          sudo chmod -R 777 .
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
           echo "status=success" >> $GITHUB_OUTPUT
 
