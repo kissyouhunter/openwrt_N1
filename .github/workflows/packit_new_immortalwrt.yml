@@ -162,6 +162,7 @@ jobs:
           sudo gzip -9 *
           sudo chmod -R 777 .
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
+          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Upload Firmware Artifacts
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
@@ -177,6 +178,9 @@ jobs:
               cp "$artifact_name" artifacts/
             fi
           done
+          cd "$FIRMWARE"
+          ls -ld . artifacts  # 检查目录权限
+          ls -l "$artifact_name"  # 检查文件权限
 
       - name: Artifact Upload
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
