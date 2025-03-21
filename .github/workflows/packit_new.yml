@@ -172,9 +172,9 @@ jobs:
             artifact_name=$(printenv "${artifact_name_var}")
             if [ "$artifact_name" != "none" ]; then
               echo "Uploading artifact: $artifact_name"
-              mkdir -p artifacts
-              cp "$artifact_name" artifacts/
+              sudo mkdir -p artifacts
               sudo chmod -R 777 artifacts
+              cp "$artifact_name" artifacts/
             fi
           done
 
