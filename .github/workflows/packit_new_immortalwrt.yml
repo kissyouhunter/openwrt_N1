@@ -103,6 +103,7 @@ jobs:
           sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
           cd /tmp/packit
           curl -LO "$ROOTFS_URL"
+          mv immortalwrt-armsr-armv8-generic-rootfs.tar.gz  openwrt-armvirt-64-generic-rootfs.tar.gz 
           cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
           cd /tmp/packit/files
           rm -f ./index.html.patches/luci-admin-status-index-html.patch
