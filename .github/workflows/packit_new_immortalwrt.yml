@@ -48,7 +48,7 @@ on:
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
-  ROOTFS_URL: https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs/immortalwrt-24.10.0-armsr-armv8-rootfs.tar.gz
+  ROOTFS_URL: https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs/immortalwrt-armsr-armv8-generic-rootfs.tar.gz
   KERNEL_URL: https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1/releases/download/kernel_stable
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
@@ -103,7 +103,7 @@ jobs:
           sed -i 's|50000|25000|g' /tmp/packit/files/cpustat
           cd /tmp/packit
           curl -LO "$ROOTFS_URL"
-          mv immortalwrt-24.10.0-armsr-armv8-rootfs.tar.gz openwrt-armvirt-64-generic-rootfs.tar.gz 
+          mv immortalwrt-armsr-armv8-generic-rootfs.tar.gz openwrt-armvirt-64-generic-rootfs.tar.gz 
           cp $GITHUB_WORKSPACE/mk_s905d_n1-docker.sh mk_s905d_n1-docker.sh -v
           cd /tmp/packit/files
           rm -f ./index.html.patches/luci-admin-status-index-html.patch
