@@ -162,7 +162,6 @@ jobs:
           sudo gzip -9 *
           sudo chmod -R 777 .
           echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-          echo "status=success" >> $GITHUB_OUTPUT
 
       - name: Upload Firmware Artifacts
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
@@ -174,8 +173,8 @@ jobs:
             if [ "$artifact_name" != "none" ]; then
               echo "Uploading artifact: $artifact_name"
               sudo mkdir -p artifacts
-              cp "$artifact_name" artifacts/
               sudo chmod -R 777 artifacts
+              cp "$artifact_name" artifacts/
             fi
           done
 
