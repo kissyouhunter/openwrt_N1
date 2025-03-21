@@ -175,6 +175,7 @@ jobs:
               echo "Uploading artifact: $artifact_name"
               mkdir -p artifacts
               cp "$artifact_name" artifacts/
+              sudo chmod -R 777 artifacts
             fi
           done
 
