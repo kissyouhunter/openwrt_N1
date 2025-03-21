@@ -114,6 +114,12 @@ jobs:
 
       - name: Pack OpenWrt
         id: pack
+        env:
+          SET_54X: ${{ github.event.inputs.set_54x }}
+          SET_510X: ${{ github.event.inputs.set_510x }}
+          SET_515X: ${{ github.event.inputs.set_515x }}
+          SET_61X: ${{ github.event.inputs.set_61x }}
+          SET_66X: ${{ github.event.inputs.set_66x }}
         run: |
           # Define an associative array mapping input keys to kernel names
           declare -A kernels
@@ -121,10 +127,10 @@ jobs:
           
           # Iterate over each kernel option provided in inputs
           for key in "${!kernels[@]}"; do
-            kernel_input="${{ github.event.inputs[$key] }}"
+            kernel_input=$(printenv "SET_${key#set_}" | tr '[:lower:]' '[:upper:]')
             kernel_ver="${kernels[$key]}"
             artifact_var="OP_${key#set_}"
-            if [ "$kernel_input" = "none" ]; then
+            if [ "$kernel_input" = "none" ] || [ -z "$kernel_input" ]; then
               echo "no kernel was chosen for version ${kernel_ver}"
               echo "${artifact_var}=none" >> $GITHUB_ENV
             else
@@ -137,8 +143,8 @@ jobs:
               rm -f make.env
               cp "$GITHUB_WORKSPACE/make_kernel.env" make.env -v
               # Replace op-kissyouhunter with kernel-specific tag and update the date/tag in make.env
-              sed -i 's|op-kissyouhunter|'"${kernel_input}"'-kissyouhunter|g' make.env
-              sed -i 's|date|'"${OP_DATE}"'|g' make.env
+              sed -i 's|op-kissyouhunter|'${kernel_input}'-kissyouhunter|g' make.env
+              sed -i 's|date|'${OP_DATE}'|g' make.env
               sudo bash mk_s905d_n1-docker.sh
               echo "${artifact_var}=openwrt_s905d_n1_R${OP_DATE}_k${kernel_input}-kissyouhunter.img.gz" >> $GITHUB_ENV
             fi
