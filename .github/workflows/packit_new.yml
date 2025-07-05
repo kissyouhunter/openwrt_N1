@@ -79,7 +79,7 @@ jobs:
           if [[ "${{ github.event.inputs.config_rootfs }}" == "with docker" ]]; then
             echo "ROOTFS_URL=https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs_with_docker/immortalwrt-armsr-armv8-generic-rootfs.tar.gz" >> $GITHUB_ENV
             echo "RELEASE_NAME=Openwrt_N1_with_docker" >> $GITHUB_ENV
-            echo "RELEASE_TAG=n1_openwrt_with_docker" >> $GITHUB_ENV
+            echo "RELEASE_TAG=openwrt_n1" >> $GITHUB_ENV
             echo "RELEASE_BODY=## Openwrt_N1 (with Docker):\n\n* IP: 192.168.2.4 ID: root Password: password\n* 刷入emmc命令： install\n* adguardhome ID: root Password: password wifi password: password\n* N1固件带有docker。\n* （一键脚本： bash <(curl -s -S -L https://git.io/JMl6C) 或者 curl -Lo ./kiss.sh https://git.io/JMl6C && bash kiss.sh）\n\n### 升级方式一：\n* 一键升级命令:（最新的固件已支持在U盘运行的openwrt）\n* 如已刷入本固件，ssh连接n1或ttyd输入update即可。\n* 命令一：bash <(curl -Lso- sg0.cc/k)\n* 命令二：bash <(curl -s -S -L https://git.io/update-N1)\n* 建议确保/mnt/mmcblk2p4/或/mnt/sda4分区剩余空间至少1G，使用df -h查看分区情况\n\n### 升级方式二：\n* 若需升级emmc内固件，请使用releases中的update-amlogic-openwrt.sh脚本\n* 将update-amlogic-openwrt.sh与img文件上传至/mnt/mmcblk2p4分区\n* SSH连接后执行：\n  cd /mnt/mmcblk2p4/ && chmod 755 update-N1-openwrt.sh\n  ./update-N1-openwrt.sh 文件名.img\n\n[注：三分区版本的N1只能写入固件到emmc，无法直接升级固件]" >> $GITHUB_ENV
           else
             echo "ROOTFS_URL=https://github.com/kissyouhunter/openwrt_N1/releases/download/rootfs/openwrt-armvirt-64-generic-rootfs.tar.gz" >> $GITHUB_ENV
