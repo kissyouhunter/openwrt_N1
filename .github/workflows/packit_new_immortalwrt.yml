@@ -32,6 +32,14 @@ on:
         description: "VER: 25.01.01 / ..."
         required: false
         default: "25.06.22"
+      rootfs_type:
+        description: "Select rootfs type"
+        required: true
+        default: "without_docker"
+        type: choice
+        options:
+          - without_docker
+          - with_docker
       upload_firmware:
         description: "whether to upload firmware."
         required: false
@@ -40,15 +48,11 @@ on:
         description: "whether to release firmware."
         required: false
         default: "true"
-      upload_rclone:
-        description: "whether to upload to OneDrive."
-        required: false
-        default: "false"
 
 env:
   REPO_URL: https://github.com/unifreq/openwrt_packit
   REPO_BRANCH: master
-  ROOTFS_URL: https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs/immortalwrt-armsr-armv8-generic-rootfs.tar.gz
+  # 下面的 ROOTFS_URL 会在 workflow 中动态设置
   KERNEL_URL: https://github.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1/releases/download/kernel_stable
   UPLOAD_BIN_DIR: false
   SERVERCHAN_SCKEY: true
@@ -65,11 +69,9 @@ jobs:
       OP_DATE: ${{ github.event.inputs.set_ver }}
       UPLOAD_FIRMWARE: ${{ github.event.inputs.upload_firmware }}
       RELEASE_FIRMWARE: ${{ github.event.inputs.release_firmware }}
-      UPLOAD_RCLONE: ${{ github.event.inputs.upload_rclone }}
     steps:
       - name: Telegram Bot (pre-build notification)
         run: |
-          # Gather CPU info and send notification if SERVERCHAN_SCKEY is true
           cat /proc/cpuinfo | grep name | cut -f2 -d: | uniq -c > CPU
           cat /proc/cpuinfo | grep "cpu cores" | uniq >> CPU
           sed -i 's|[[:space:]]||g; s|^.||' CPU && sed -i 's|CPU||g; s|pucores:||' CPU
@@ -85,7 +87,6 @@ jobs:
 
       - name: Installing Requirements & Cleaning Docker Images
         run: |
-          # Clear dangling docker images to free up space
           docker rmi $(docker images -q) || true
           sudo -E apt-get update
           sudo -E apt-get install subversion -y
@@ -95,6 +96,19 @@ jobs:
       - name: Check Space Usage
         if: (!cancelled())
         run: df -hT
+
+      - name: Set ROOTFS_URL and Release Info
+        id: setrootfs
+        run: |
+          if [[ "${{ github.event.inputs.rootfs_type }}" == "with_docker" ]]; then
+            echo "ROOTFS_URL=https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs_with_docker/immortalwrt-armsr-armv8-generic-rootfs.tar.gz" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Openwrt_N1_with_docker" >> $GITHUB_ENV
+            echo "RELEASE_TAG=n1_openwrt_with_docker" >> $GITHUB_ENV
+          else
+            echo "ROOTFS_URL=https://github.com/kissyouhunter/openwrt_immortalwrt/releases/download/rootfs/immortalwrt-armsr-armv8-generic-rootfs.tar.gz" >> $GITHUB_ENV
+            echo "RELEASE_NAME=Openwrt_N1_without_docker" >> $GITHUB_ENV
+            echo "RELEASE_TAG=n1_openwrt" >> $GITHUB_ENV
+          fi
 
       - name: Download Openwrt_Packit
         id: packit
@@ -122,13 +136,9 @@ jobs:
           SET_61X: ${{ github.event.inputs.set_61x }}
           SET_66X: ${{ github.event.inputs.set_66x }}
         run: |
-          # Define an associative array mapping input keys to kernel names
           declare -A kernels
           kernels=( ["set_54x"]="5.4" ["set_510x"]="5.10" ["set_515x"]="5.15" ["set_61x"]="6.1" ["set_66x"]="6.6" )
-
-          # Iterate over each kernel option provided in inputs
           for key in "${!kernels[@]}"; do
-            # 将变量名中的 'x' 转为大写 'X' 以匹配 env 中的定义
             var_name="SET_$(echo "${key#set_}" | tr '[:lower:]' '[:upper:]')"
             kernel_input=$(printenv "$var_name")
             kernel_ver="${kernels[$key]}"
@@ -145,7 +155,6 @@ jobs:
               rm -rf "${kernel_input}.tar.gz" "${kernel_input}"
               rm -f make.env
               cp "$GITHUB_WORKSPACE/make_kernel.env" make.env -v
-              # Replace op-kissyouhunter with kernel-specific tag and update the date/tag in make.env
               sed -i 's|op-kissyouhunter|'${kernel_input}'-kissyouhunter|g' make.env
               sed -i 's|date|'${OP_DATE}'|g' make.env
               sudo bash mk_s905d_n1-docker.sh
@@ -191,8 +200,8 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.REPO_TOKEN }}
-          name: Openwrt_N1_without_docker
-          tag: n1_openwrt
+          name: ${{ env.RELEASE_NAME }}
+          tag: ${{ env.RELEASE_TAG }}
           commit: main
           allowUpdates: true
           repo: Openwrt_X86-Openwrt_N1-Armbian_N1
@@ -203,18 +212,16 @@ jobs:
 
             * 刷入emmc命令： install
 
-            * adguardhome已内置好DNS和广告过滤，下载好核心后开启即可。
-
             * adguardhome ID: root Password: password wifi password: password
 
-            * N1固件不带docker,请用一键脚本自行安装。
+            * N1固件${{ github.event.inputs.rootfs_type == 'with_docker' && '带有docker' || '不带docker' }}。
 
             * （一键脚本： bash <(curl -s -S -L https://git.io/JMl6C) 或者 curl -Lo ./kiss.sh https://git.io/JMl6C && bash kiss.sh）
 
             ### 升级方式一：
             * 一键升级命令:（最新的固件已支持在U盘运行的openwrt）
             * 如已刷入本固件，ssh连接n1或ttyd输入update即可。
-            * 命令一：bash <(curl -Lso- nb0.cc/k)
+            * 命令一：bash <(curl -Lso- sg0.cc/k)
             * 命令二：bash <(curl -s -S -L https://git.io/update-N1)
             * 建议确保/mnt/mmcblk2p4/或/mnt/sda4分区剩余空间至少1G，使用df -h查看分区情况
 
@@ -227,19 +234,6 @@ jobs:
 
             [注：三分区版本的N1只能写入固件到emmc，无法直接升级固件]
           artifacts: ${{ env.FIRMWARE }}/*.gz
-
-      - name: Setup Rclone
-        uses: AnimMouse/setup-rclone@v1
-        if: steps.organize.outputs.status == 'success' && env.UPLOAD_RCLONE == 'true' && !cancelled()
-        with:
-          rclone_config: ${{ secrets.RCLONE_CONFIG }}
-
-      - name: Upload to OneDrive
-        if: steps.organize.outputs.status == 'success' && env.UPLOAD_RCLONE == 'true' && !cancelled()
-        run: |
-          cd /tmp/packit/
-          sudo chmod -R 777 .
-          rclone -v move output kiss_blockads:onedrive/OPENWRT/N1_OP
 
       - name: Notify on failure
         if: ${{ failure() }}
