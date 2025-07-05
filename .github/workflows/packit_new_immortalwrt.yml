@@ -8,26 +8,10 @@ on:
         description: 'SSH connection to Actions'
         required: false
         default: 'false'
-      set_54x:
-        description: "KERNEL: 5.4.x / none"
-        required: false
-        default: "none"
-      set_510x:
-        description: "KERNEL: 5.10.x / none"
-        required: false
-        default: "none"
-      set_515x:
-        description: "KERNEL: 5.15.x / none"
-        required: false
-        default: "none"
-      set_61x:
-        description: "KERNEL: 6.1.x / none"
-        required: false
-        default: "none"
-      set_66x:
-        description: "KERNEL: 6.6.x / none"
-        required: false
-        default: "none"
+      kernel_versions:
+        description: "Input kernel version(s), e.g. 5.4.265 or 5.4.265,5.10.230"
+        required: true
+        default: "5.4.265"
       set_ver:
         description: "VER: 25.01.01 / ..."
         required: false
@@ -129,37 +113,26 @@ jobs:
 
       - name: Pack OpenWrt
         id: pack
-        env:
-          SET_54X: ${{ github.event.inputs.set_54x }}
-          SET_510X: ${{ github.event.inputs.set_510x }}
-          SET_515X: ${{ github.event.inputs.set_515x }}
-          SET_61X: ${{ github.event.inputs.set_61x }}
-          SET_66X: ${{ github.event.inputs.set_66x }}
         run: |
-          declare -A kernels
-          kernels=( ["set_54x"]="5.4" ["set_510x"]="5.10" ["set_515x"]="5.15" ["set_61x"]="6.1" ["set_66x"]="6.6" )
-          for key in "${!kernels[@]}"; do
-            var_name="SET_$(echo "${key#set_}" | tr '[:lower:]' '[:upper:]')"
-            kernel_input=$(printenv "$var_name")
-            kernel_ver="${kernels[$key]}"
-            artifact_var="OP_${key#set_}"
-            if [ "$kernel_input" = "none" ] || [ -z "$kernel_input" ]; then
-              echo "no kernel was chosen for version ${kernel_ver}"
-              echo "${artifact_var}=none" >> $GITHUB_ENV
-            else
-              echo "Processing kernel version ${kernel_input} for ${kernel_ver}"
-              cd /tmp/packit
-              curl -LO "$KERNEL_URL/${kernel_input}.tar.gz"
-              tar -xzf "${kernel_input}.tar.gz"
-              mv ./"${kernel_input}"/*kissyouhunter.tar.gz ./
-              rm -rf "${kernel_input}.tar.gz" "${kernel_input}"
-              rm -f make.env
-              cp "$GITHUB_WORKSPACE/make_kernel.env" make.env -v
-              sed -i 's|op-kissyouhunter|'${kernel_input}'-kissyouhunter|g' make.env
-              sed -i 's|date|'${OP_DATE}'|g' make.env
-              sudo bash mk_s905d_n1-docker.sh
-              echo "${artifact_var}=openwrt_s905d_n1_R${OP_DATE}_k${kernel_input}-kissyouhunter.img.gz" >> $GITHUB_ENV
+          IFS=',' read -ra KERNELS <<< "${{ github.event.inputs.kernel_versions }}"
+          for kernel in "${KERNELS[@]}"; do
+            kernel=$(echo "$kernel" | xargs)
+            if [ -z "$kernel" ]; then
+              echo "Skip empty kernel version"
+              continue
             fi
+            echo "Processing kernel version: $kernel"
+            cd /tmp/packit
+            curl -LO "$KERNEL_URL/${kernel}.tar.gz"
+            tar -xzf "${kernel}.tar.gz"
+            mv ./"${kernel}"/*kissyouhunter.tar.gz ./
+            rm -rf "${kernel}.tar.gz" "${kernel}"
+            rm -f make.env
+            cp "$GITHUB_WORKSPACE/make_kernel.env" make.env -v
+            sed -i 's|op-kissyouhunter|'${kernel}'-kissyouhunter|g' make.env
+            sed -i 's|date|'${OP_DATE}'|g' make.env
+            sudo bash mk_s905d_n1-docker.sh
+            echo "OP_${kernel}=openwrt_s905d_n1_R${OP_DATE}_k${kernel}-kissyouhunter.img.gz" >> $GITHUB_ENV
           done
           echo "status=success" >> $GITHUB_OUTPUT
 
@@ -177,10 +150,11 @@ jobs:
         if: steps.organize.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
         run: |
           cd "$FIRMWARE"
-          for key in set_54x set_510x set_515x set_61x set_66x; do
-            artifact_name_var="OP_${key#set_}"
-            artifact_name=$(printenv "${artifact_name_var}")
-            if [ "$artifact_name" != "none" ]; then
+          IFS=',' read -ra KERNELS <<< "${{ github.event.inputs.kernel_versions }}"
+          for kernel in "${KERNELS[@]}"; do
+            kernel=$(echo "$kernel" | xargs)
+            artifact_name="openwrt_s905d_n1_R${OP_DATE}_k${kernel}-kissyouhunter.img.gz"
+            if [ -f "$artifact_name" ]; then
               echo "Uploading artifact: $artifact_name"
               sudo mkdir -p artifacts
               sudo chmod -R 777 artifacts
