@@ -11,7 +11,7 @@ on:
       kernel_versions:
         description: "Input kernel version(s), e.g. 5.4.265 or 5.4.265,5.10.230"
         required: true
-        default: "5.4.265"
+        default: "none"
       set_ver:
         description: "VER: 25.01.01 / ..."
         required: false
