@@ -194,14 +194,14 @@ jobs:
 
             ### 升级方式一：
             * 一键升级命令:（最新的固件已支持在U盘运行的openwrt）
-            * 如已刷入本固件，ssh连接n1或ttyd输入update即可。
+            * 如已刷入本固件，ssh连接n1或ttyd输入update即可(2025.07以后的固件)。
             * 命令一：bash <(curl -Lso- sg0.cc/k)
             * 命令二：bash <(curl -s -S -L https://git.io/update-N1)
             * 建议确保/mnt/mmcblk2p4/或/mnt/sda4分区剩余空间至少1G，使用df -h查看分区情况
 
             ### 升级方式二：
-            * 若需升级emmc内固件，请使用releases中的update-amlogic-openwrt.sh脚本
-            * 将update-amlogic-openwrt.sh与img文件上传至/mnt/mmcblk2p4分区
+            * 若需升级emmc内固件，请用[update-N1-openwrt.sh](https://raw.githubusercontent.com/kissyouhunter/Openwrt_X86-Openwrt_N1-Armbian_N1/refs/heads/main/update-N1-openwrt.sh)
+            * 将update-N1-openwrt.sh与img文件上传至/mnt/mmcblk2p4分区
             * SSH连接后执行：
               cd /mnt/mmcblk2p4/ && chmod 755 update-N1-openwrt.sh
               ./update-N1-openwrt.sh 文件名.img
